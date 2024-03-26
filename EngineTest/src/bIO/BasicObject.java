@@ -18,16 +18,14 @@ public class BasicObject {
 	
 	//Overwrite in children
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>();
-	private static final String object_name = "Object";
-	public String getName() { return object_name; }
 	public BasicSprite getSprite() { return state_machine.get(state); }
 	
 	BasicObject(BasicIO io) {
 		this.io = io;
 		this.frame_time = io.getCurTime();
-		this.position = new Vec2f(0,0);
-		this.bbox = new BoundingBox(0,0);
-		this.sprite_origin = new Vec2f(0,0);
+		this.position = new Vec2f(new BasicNumber(0),new BasicNumber(0));
+		this.bbox = new BoundingBox(new BasicNumber(0),new BasicNumber(0));
+		this.sprite_origin = new Vec2f(new BasicNumber(0),new BasicNumber(0));
 		this.sprite_playback = 10;
 		this.sprite_index = 0;
 		this.scale = 1.0f;

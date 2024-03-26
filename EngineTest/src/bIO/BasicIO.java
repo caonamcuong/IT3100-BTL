@@ -7,11 +7,13 @@ import java.util.Queue;
 import java.util.TreeSet;
 
 import java.awt.event.KeyEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Graphics;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -23,11 +25,6 @@ import javax.swing.JComponent;
 
 public class BasicIO implements Engine {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4395625629568626917L;
-	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
@@ -37,20 +34,21 @@ public class BasicIO implements Engine {
 		// bam space de nhay
 		
 		BasicIO bsio = new BasicIO();
-		bsio.addObject(new BasicPlayer(bsio) {{setPosition(new Vec2f(120,0));}});
+		bsio.addObject(new BasicPlayer(bsio) {{setPosition(new Vec2f(120f,48));}});
 		for (int i = 0; i < 20; ++i) {
-			float xx = i * 32f;
-			bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(xx, 6*32));}});
+			BasicNumber xx = new BasicNumber(i * 32f);
+			BasicNumber yy = new BasicNumber(6*32);
+			bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(xx, yy));}});
 		}
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(4*32, 5*32));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(5*32, 5*32));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(8*32, 3*32));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(9*32, 5*32));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(11*32, 5*32));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(11*32, 4*32));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(3*32, 5*32));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(3*32, 4*32));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(1*32, 5*32));}});
+		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(4*32), new BasicNumber(5*32)));}});
+		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(5*32), new BasicNumber(5*32)));}});
+		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(7*32), new BasicNumber(3*32)));}});
+		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(9*32), new BasicNumber(5*32)));}});
+		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(11*32), new BasicNumber(5*32)));}});
+		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(11*32), new BasicNumber(4*32)));}});
+		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(3*32), new BasicNumber(5*32)));}});
+		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(3*32), new BasicNumber(4*32)));}});
+		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(1*32), new BasicNumber(5*32)));}});
 		
 		bsio.run();
 	}
@@ -71,7 +69,8 @@ public class BasicIO implements Engine {
 	private JComponent jc;
 	
 	public BasicIO() {
-		System.setProperty("sun.java2d.opengl", "true");
+		if (System.getProperty("sun.java2d.opengl") != null)
+			System.setProperty("sun.java2d.opengl", "true");
 		input_queue = new LinkedList<InputEvent>();
 		pressing_keys = new TreeSet<Integer>();
 		past_time = System.nanoTime();
@@ -79,7 +78,9 @@ public class BasicIO implements Engine {
 		main_frame = new JFrame();
 		sprite_man = new BasicSpriteManager();
 		quad_tree = new BasicQuadTree(new BoundingBox(
-				640*2, 360*2, -320, -180), 128);
+				new BasicNumber(640*2), new BasicNumber(360*2), 
+				new BasicNumber(-320), new BasicNumber(-180)), 
+			128);
 		
 		main_frame.setSize(640,360);
 		main_frame.setFocusable(true);
@@ -123,18 +124,32 @@ public class BasicIO implements Engine {
 						catch (IOException e) {
 							throw new RuntimeException("cannot load sprite");
 						}
-						Vec2f sprite_size = new Vec2f(bI.getWidth(), bI.getHeight());
+						
+						// translate (-0.5, -0.5)
+						// rotate (deg)
+						// scale (scl)
+						// translate (0.5, 0.5)
+						// draw
+						AffineTransform at = new AffineTransform();
+						at.setToScale(o.getScale(), o.getScale());
+						
+						AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+						BufferedImage bIa = new BufferedImage((int)(bI.getWidth()*o.getScale()), (int)(bI.getHeight()*o.getScale()), BufferedImage.TYPE_3BYTE_BGR);
+						op.filter(bI, bIa);
+						
+						Vec2f sprite_size = new Vec2f(new BasicNumber(bIa.getWidth()), 
+								new BasicNumber(bIa.getHeight()));
 						Vec2f draw_position = o.getPosition().sub(sprite_size.mul(o.getSpriteOrigin()));
-						int dx = (int)draw_position.getX();
-						int dy = (int)draw_position.getY();
-						g.drawImage(bI, dx, dy, null);
+						int dx = (int)draw_position.getX().toDouble();
+						int dy = (int)draw_position.getY().toDouble();
+						g.drawImage(bIa, dx, dy, null);
 					}
 					if (o.getBBoxDrawFlag()) {
 						BoundingBox bb = o.getBBox();
-						int dx = (int)bb.getX();
-						int dy = (int)bb.getY();
-						int dw = (int)bb.getWidth();
-						int dh = (int)bb.getHeight();
+						int dx = (int)bb.getX().toDouble();
+						int dy = (int)bb.getY().toDouble();
+						int dw = (int)bb.getWidth().toDouble();
+						int dh = (int)bb.getHeight().toDouble();
 						g.drawRect(dx, dy, dw, dh);
 					}
 				}
@@ -184,6 +199,11 @@ public class BasicIO implements Engine {
 		while (itr.hasNext()) {
 			BasicObject o = itr.next();
 			o.fixedUpdate();
+		}
+		
+		itr = active_object.iterator();
+		while (itr.hasNext()){
+			BasicObject o = itr.next();
 			o.postUpdate();
 		}
 	}
