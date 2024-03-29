@@ -46,19 +46,22 @@ public class BasicQuadTree {
 		
 		n.nw = newNode(new BoundingBox(
 				cur_bb.getX(), cur_bb.getY(),
-				cur_bb.getWidth()/2f, cur_bb.getHeight()/2f
+				cur_bb.getWidth().div(2f), 
+				cur_bb.getHeight().div(2f)
 			), n);
 		n.ne = newNode(new BoundingBox(
-				cur_bb.getX() + cur_bb.getWidth()/2f, cur_bb.getY(),
-				cur_bb.getWidth()/2f, cur_bb.getHeight()/2f
+				cur_bb.getX().add(cur_bb.getWidth().div(2f)), cur_bb.getY(),
+				cur_bb.getWidth().div(2f), cur_bb.getHeight().div(2f)
 			), n);
 		n.sw = newNode(new BoundingBox(
-				cur_bb.getX(), cur_bb.getY() + cur_bb.getHeight()/2f,
-				cur_bb.getWidth()/2f, cur_bb.getHeight()/2f
+				cur_bb.getX(), cur_bb.getY().add(cur_bb.getHeight().div(2f)),
+				cur_bb.getWidth().div(2f), cur_bb.getHeight().div(2f)
 			), n);
 		n.se = newNode(new BoundingBox(
-				cur_bb.getX() + cur_bb.getWidth()/2f, cur_bb.getY() + cur_bb.getHeight()/2f,
-				cur_bb.getWidth()/2f, cur_bb.getHeight()/2f
+				cur_bb.getX().add(cur_bb.getWidth().div(2f)), 
+				cur_bb.getY().add(cur_bb.getHeight().div(2f)),
+				cur_bb.getWidth().div(2f), 
+				cur_bb.getHeight().div(2f)
 			), n);
 		
 		for (BasicObject o: n.list_object) {

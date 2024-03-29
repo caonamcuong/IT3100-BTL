@@ -23,9 +23,6 @@ public class BasicPlayer extends BasicObject {
 			Arrays.asList(16,16,16)
 		));
 	}};
-	private static final String object_name = "TestPlayer";
-	@Override
-	public String getName() { return object_name; }
 	@Override
 	public BasicSprite getSprite() { return state_machine.get(getState()); }
 	
@@ -36,14 +33,15 @@ public class BasicPlayer extends BasicObject {
 	private BasicTimer holding_jump_timer;
 	private BasicTimer coyote_timer;
 	
-	BasicPlayer(BasicIO io) {
+	public BasicPlayer(BasicIO io) {
 		super(io);
 		setState("idle");
 		setPosition(new Vec2f(0,0));
-		setBBox(new BoundingBox(8, 16));
+		setBBox(new BoundingBox(16, 32));
 		setBBoxOrigin(new Vec2f(0.5f, 1.0f));
 		setBBoxDrawFlag(true);
 		setSpriteOrigin(new Vec2f(0.5f, 1.0f));
+		setScale(2f);
 		
 		velocity = new Vec2f(0,0);
 		acceleration = new Vec2f(0,0);
@@ -63,7 +61,6 @@ public class BasicPlayer extends BasicObject {
 	
 	@Override
 	public void fixedUpdate() {
-		
 		int movx = (getIO().isPressing(KeyEvent.VK_RIGHT)?1:0)
 				- (getIO().isPressing(KeyEvent.VK_LEFT)?1:0);
 		int movy = 0;
@@ -75,7 +72,7 @@ public class BasicPlayer extends BasicObject {
 				holding_jump_timer.setup();
 			}
 			else if (holding_jump) {
-				velocity = velocity.add(0, -1f);
+				velocity = velocity.add(new BasicNumber(0), new BasicNumber(-1f));
 			}
 		}
 		else {
@@ -85,63 +82,72 @@ public class BasicPlayer extends BasicObject {
 			}
 		}
 		
-		velocity.setX(Math.max(Math.min(movx*1000, 1000), -1000));
-		if (movy !=0) velocity.setY(-movy*100);
-		velocity = velocity.add(0, 0.2f);
+		velocity.setX(new BasicNumber(Math.max(Math.min(movx*1000, 1000), -1000)));
+		if (movy !=0) velocity.setY(new BasicNumber(-movy*100));
+		velocity = velocity.add(new BasicNumber(0), new BasicNumber(0.2f));
 		List<BasicObject> o = getIO().quadQueryObject(new BoundingBox(
-			128, 128,
-			getBBox().getX() - 64,
-			getBBox().getY() - 64
+			new BasicNumber(128), new BasicNumber(128),
+			getBBox().getX().sub(new BasicNumber(64)),
+			getBBox().getY().sub(new BasicNumber(64))
 		));
 		o.removeIf(p -> !(p instanceof BasicWall));
 		
-		Vec2f mov_step = velocity.mul(getIO().getUnitStep(1f));
-		float dy = mov_step.getY();
+		Vec2f mov_step = velocity.mul(new BasicNumber(getIO().getUnitStep(1f)));
+		
+		BasicNumber dx = mov_step.getX();
 		for (int i = 0; i < 32; ++i) {
 			boolean do_collide = false;
 			BasicObject collision_o = null;
 			for (BasicObject w: o) {
-				if (getBBox().add(0, dy).collideWith(w.getBBox())) {
+				if (getBBox().add(dx, new BasicNumber(0)).collideWith(w.getBBox())) {
 					do_collide=true;
 					collision_o = w;
 					break;
 				}
 			}
 			if (do_collide) {
-				if (dy > 0f) {
-					velocity.setY(0);
-					can_jump = true;
-					coyote_timer.setup();
-				}
-				dy /= 2f;
-				
-				//hacky-ish
+				dx = dx.div(2f);
 				if (i == 31) {
-					if (dy > 0f) dy = collision_o.getBBox().getY() - getBBox().getY2();
-					else dy = collision_o.getBBox().getY2() - getBBox().getY();
+					if (dx.gt(new BasicNumber(0f))) dx = collision_o.getBBox().getX().sub(getBBox().getX2());
+					else dx = collision_o.getBBox().getX2().sub(getBBox().getX());
 				}
 			}
 			else break;
-			
-			
 		}
-		coyote_timer.run();
-		holding_jump_timer.run();
+		if (Math.abs(dx.toFloat()) < 0.0001f) dx = new BasicNumber(0);
+		mov_step.setX(dx);
 		
-		mov_step.setY(dy);
-		float dx = mov_step.getX();
+		BasicNumber dy = mov_step.getY();
 		for (int i = 0; i < 32; ++i) {
 			boolean do_collide = false;
+			BasicObject collision_o = null;
 			for (BasicObject w: o) {
-				if (getBBox().add(dx, 0).collideWith(w.getBBox())) {
+				if (getBBox().add(new BasicNumber(0), dy).collideWith(w.getBBox())) {
 					do_collide=true;
+					collision_o = w;
 					break;
 				}
 			}
-			if (do_collide) dx /= 2f;
+			if (do_collide) {
+				velocity.setY(new BasicNumber(0));
+				if (dy.toFloat() > 0f) {
+					can_jump = true;
+					coyote_timer.setup();
+				}
+				dy = dy.div(2f);
+				
+				//hacky-ish
+				if (i == 31) {
+					if (dy.toFloat() > 0f) dy = collision_o.getBBox().getY().sub(getBBox().getY2());
+					else dy = collision_o.getBBox().getY2().sub(getBBox().getY());
+				}
+			}
 			else break;
 		}
-		mov_step.setX(dx);
+		coyote_timer.run();
+		holding_jump_timer.run();
+		if (Math.abs(dy.toFloat()) < 0.0001f) dy = new BasicNumber(0);
+		mov_step.setY(dy);
 		
 		Vec2f old_pos = getPosition();
 		setPosition(getPosition().add(mov_step));
@@ -154,7 +160,7 @@ public class BasicPlayer extends BasicObject {
 	}
 	@Override
 	public void postUpdate() { 
-		if (velocity.getX() != 0) {
+		if (velocity.getX().toFloat() != 0) {
 			if (!getState().equals("run"))
 				setState("run");
 		}
@@ -162,7 +168,12 @@ public class BasicPlayer extends BasicObject {
 			if (!getState().equals("idle"))
 				setState("idle");
 		}
+		if (velocity.getX().gt(0)) setHFlip(false);
+		else if (velocity.getX().lt(0)) setHFlip(true);
+		Vec2f old_pos = getPosition();
+		setPosition(getPosition().sub(new Vec2f(0.005f, 0)));
 		bboxUpdate();
+		getIO().quadUpdateObject(this, old_pos);
 	}
 	
 }
