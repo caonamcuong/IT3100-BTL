@@ -9,7 +9,7 @@ public class BasicWall extends BasicObject {
 	@Override
 	public BasicSprite getSprite() { return state_machine.get(getState()); }
 	
-	BasicWall(BasicIO io) {
+	public BasicWall(BasicIO io) {
 		super(io);
 		setState("idle");
 		setPosition(new Vec2f(0,0));

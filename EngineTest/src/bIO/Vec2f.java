@@ -7,11 +7,11 @@ public class Vec2f {
 	public void setX(BasicNumber n) { x=n; }
 	public void setY(BasicNumber n) { y=n; }
 	
-	Vec2f (BasicNumber x, BasicNumber y) {
+	public Vec2f (BasicNumber x, BasicNumber y) {
 		this.x = x;
 		this.y = y;
 	}
-	Vec2f (float x, float y) {
+	public Vec2f (float x, float y) {
 		this.x = new BasicNumber(x);
 		this.y = new BasicNumber(y);
 	}

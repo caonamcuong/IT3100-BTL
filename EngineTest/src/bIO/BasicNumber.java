@@ -4,13 +4,13 @@ public class BasicNumber {
 	private long value;
 	private static long step = 512*512; // 2^n
 	
-	BasicNumber() {
+	public BasicNumber() {
 		value = 0;
 	}
-	BasicNumber(double d) {
+	public BasicNumber(double d) {
 		value = (long)(d * step);
 	}
-	BasicNumber(float f) {
+	public BasicNumber(float f) {
 		value = (long)(f * step);
 	}
 	

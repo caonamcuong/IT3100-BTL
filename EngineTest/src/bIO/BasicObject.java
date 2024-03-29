@@ -22,7 +22,7 @@ public class BasicObject {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>();
 	public BasicSprite getSprite() { return state_machine.get(state); }
 	
-	BasicObject(BasicIO io) {
+	public BasicObject(BasicIO io) {
 		this.io = io;
 		this.frame_time = io.getCurTime();
 		this.position = new Vec2f(new BasicNumber(0),new BasicNumber(0));

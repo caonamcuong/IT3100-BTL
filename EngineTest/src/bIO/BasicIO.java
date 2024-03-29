@@ -25,39 +25,6 @@ import javax.swing.JComponent;
 
 public class BasicIO implements Engine {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
-		// TEST
-		
-		// di chuyen bang mui ten trai-phai
-		// bam space de nhay
-		
-		BasicIO bsio = new BasicIO();
-		bsio.addObject(new BasicPlayer(bsio) {{setPosition(new Vec2f(120f,48));}});
-		for (int i = 0; i < 20; ++i) {
-			for (int j = 6; j <= 9; ++j) {
-			BasicNumber xx = new BasicNumber(i * 32f);
-			BasicNumber yy = new BasicNumber(j * 32f);
-			bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(xx, yy));}});
-			}
-		}
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(4*32), new BasicNumber(5*32)));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(5*32), new BasicNumber(5*32)));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(7*32), new BasicNumber(3*32)));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(9*32), new BasicNumber(5*32)));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(11*32), new BasicNumber(5*32)));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(11*32), new BasicNumber(4*32)));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(3*32), new BasicNumber(5*32)));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(3*32), new BasicNumber(4*32)));}});
-		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(1*32), new BasicNumber(5*32)));}});
-		
-		bsio.addBackgroundObject(new BasicBackground(bsio) {{setPosition(new Vec2f(0, 0));}});
-		bsio.addBackgroundObject(new BasicBackground(bsio) {{setPosition(new Vec2f(607, 0));}});
-		
-		bsio.run();
-	}
-	
 	private Queue<InputEvent> input_queue;
 	private long past_time, cur_time;
 	private static final long time_step = 100000;

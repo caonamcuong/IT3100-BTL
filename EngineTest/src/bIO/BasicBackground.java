@@ -15,7 +15,7 @@ public class BasicBackground extends BasicObject {
 	}};
 	@Override
 	public BasicSprite getSprite() { return state_machine.get(getState()); }
-	BasicBackground(BasicIO io) {
+	public BasicBackground(BasicIO io) {
 		super(io);
 		setState("idle");
 		setBBox(new BoundingBox(607, 0));

@@ -6,7 +6,7 @@ public class BasicTimer {
 	private boolean running;
 	private Runnable action;
 	
-	BasicTimer(long init_counter, Runnable action) {
+	public BasicTimer(long init_counter, Runnable action) {
 		this.init_counter = init_counter;
 		this.action = action;
 		this.running = false;

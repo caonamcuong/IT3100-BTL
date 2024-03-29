@@ -4,26 +4,26 @@ public class BoundingBox {
 	Vec2f position;
 	Vec2f size;
 	
-	BoundingBox(BasicNumber w, BasicNumber h) {
+	public BoundingBox(BasicNumber w, BasicNumber h) {
 		size = new Vec2f(w, h);
 		position = new Vec2f(new BasicNumber(0),new BasicNumber(0));
 	}
-	BoundingBox(BasicNumber w, BasicNumber h, BasicNumber x, BasicNumber y) {
+	public BoundingBox(BasicNumber w, BasicNumber h, BasicNumber x, BasicNumber y) {
 		size = new Vec2f(w, h);
 		position = new Vec2f(x, y);
 	}
-	BoundingBox(float w, float h) {
+	public BoundingBox(float w, float h) {
 		this(new BasicNumber(w), new BasicNumber(h));
 	}
-	BoundingBox(float w, float h, float x, float y) {
+	public BoundingBox(float w, float h, float x, float y) {
 		this(new BasicNumber(w), new BasicNumber(h),
 				new BasicNumber(x), new BasicNumber(y));
 	}
-	BoundingBox(Vec2f v) {
+	public BoundingBox(Vec2f v) {
 		size = v;
 		position = new Vec2f(new BasicNumber(0),new BasicNumber(0));
 	}
-	BoundingBox(Vec2f v1, Vec2f v2) {
+	public BoundingBox(Vec2f v1, Vec2f v2) {
 		size = v1;
 		position = v2;
 	}

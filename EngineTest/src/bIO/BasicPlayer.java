@@ -33,7 +33,7 @@ public class BasicPlayer extends BasicObject {
 	private BasicTimer holding_jump_timer;
 	private BasicTimer coyote_timer;
 	
-	BasicPlayer(BasicIO io) {
+	public BasicPlayer(BasicIO io) {
 		super(io);
 		setState("idle");
 		setPosition(new Vec2f(0,0));
