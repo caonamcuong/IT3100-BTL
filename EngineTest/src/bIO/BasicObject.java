@@ -7,11 +7,13 @@ public class BasicObject {
 	private BoundingBox bbox;
 	private Vec2f bbox_origin;
 	private boolean bbox_draw_flag;
-	private float scale, rotation;
+	private float scale;
+	private boolean hflip, vflip;
 	private Vec2f sprite_origin;
 	private int sprite_index;
 	private int sprite_playback; // frame per sec
 	private String state;
+	
 	
 	private long frame_time;
 	private BasicIO io;
@@ -29,7 +31,8 @@ public class BasicObject {
 		this.sprite_playback = 10;
 		this.sprite_index = 0;
 		this.scale = 1.0f;
-		this.rotation = 1.0f;
+		this.hflip = false;
+		this.vflip = false;
 		this.bbox_draw_flag = false;
 	}
 	
@@ -64,12 +67,13 @@ public class BasicObject {
 	public Vec2f getBBoxOrigin() { return bbox_origin; }
 	public Vec2f getPosition() { return position; }
 	public float getScale() { return scale; }
-	public float getRotation() { return rotation; }
 	public long getFrameTime() { return frame_time; }
 	public void setFrameTime(long tm) { frame_time = tm; }
 	public int getSpriteIndex() { return sprite_index; }
 	public int getSpritePlayback() { return sprite_playback; }
 	public String getState() { return state; }
+	public boolean getHFlip() { return hflip; }
+	public boolean getVFlip() { return vflip; }
 	
 	public void setSpriteOrigin(Vec2f origin) { sprite_origin = origin; }
 	public void setBBoxDrawFlag(boolean flag) { bbox_draw_flag = flag; }
@@ -77,7 +81,6 @@ public class BasicObject {
 	public void setBBoxOrigin(Vec2f origin) { bbox_origin = origin; }
 	public void setPosition(Vec2f pos) { position = pos; }
 	public void setScale(float scl) { scale = scl; }
-	public void setRotation(float rot) { rotation = rot; }
 	public void setSpriteIndex(int idx) { sprite_index = idx; }
 	public void setSpritePlayback(int framerate) { sprite_playback = framerate; }
 	public void setState(String st) { 
@@ -85,5 +88,7 @@ public class BasicObject {
 		sprite_index=0;
 		frame_time=io.getCurTime();
 	}
+	public void setHFlip(boolean b) {hflip=b;}
+	public void setVFlip(boolean b) {vflip=b;}
 	
 }

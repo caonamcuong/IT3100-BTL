@@ -168,6 +168,8 @@ public class BasicPlayer extends BasicObject {
 			if (!getState().equals("idle"))
 				setState("idle");
 		}
+		if (velocity.getX().gt(0)) setHFlip(false);
+		else if (velocity.getX().lt(0)) setHFlip(true);
 		Vec2f old_pos = getPosition();
 		setPosition(getPosition().sub(new Vec2f(0.005f, 0)));
 		bboxUpdate();

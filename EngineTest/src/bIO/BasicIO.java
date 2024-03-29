@@ -36,9 +36,11 @@ public class BasicIO implements Engine {
 		BasicIO bsio = new BasicIO();
 		bsio.addObject(new BasicPlayer(bsio) {{setPosition(new Vec2f(120f,48));}});
 		for (int i = 0; i < 20; ++i) {
+			for (int j = 6; j <= 9; ++j) {
 			BasicNumber xx = new BasicNumber(i * 32f);
-			BasicNumber yy = new BasicNumber(6*32);
+			BasicNumber yy = new BasicNumber(j * 32f);
 			bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(xx, yy));}});
+			}
 		}
 		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(4*32), new BasicNumber(5*32)));}});
 		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(5*32), new BasicNumber(5*32)));}});
@@ -49,6 +51,9 @@ public class BasicIO implements Engine {
 		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(3*32), new BasicNumber(5*32)));}});
 		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(3*32), new BasicNumber(4*32)));}});
 		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(1*32), new BasicNumber(5*32)));}});
+		
+		bsio.addBackgroundObject(new BasicBackground(bsio) {{setPosition(new Vec2f(0, 0));}});
+		bsio.addBackgroundObject(new BasicBackground(bsio) {{setPosition(new Vec2f(607, 0));}});
 		
 		bsio.run();
 	}
@@ -64,6 +69,7 @@ public class BasicIO implements Engine {
 	private BasicSpriteManager sprite_man;
 	private BasicQuadTree quad_tree;
 	private LinkedList<BasicObject> active_object;
+	private LinkedList<BasicObject> background_object;
 	
 	// test section remove later
 	private JComponent jc;
@@ -107,12 +113,21 @@ public class BasicIO implements Engine {
 			}
 		});
 		active_object = new LinkedList<BasicObject>();
+		background_object = new LinkedList<BasicObject>();
 		
 		//Test section remove later
 		jc = new JComponent() {
 			public void paintComponent(Graphics g) {
-				if (active_object.size()==0) return;
-				Iterator<BasicObject> itr = active_object.iterator();
+				if (background_object.size()!=0) {
+					Iterator<BasicObject> itr = background_object.iterator();
+					drawList(itr, g);
+				}
+				if (active_object.size()!=0) {
+					Iterator<BasicObject> itr = active_object.iterator();
+					drawList(itr, g);
+				}
+			}
+			private void drawList(Iterator<BasicObject> itr, Graphics g) {
 				while (itr.hasNext()) {
 					BasicObject o = itr.next();
 					BasicSprite sprite = o.getSprite();
@@ -130,6 +145,11 @@ public class BasicIO implements Engine {
 						// scale (scl)
 						// translate (0.5, 0.5)
 						// draw
+						AffineTransform atflip = AffineTransform.getScaleInstance(o.getHFlip()?-1:1, o.getVFlip()?-1:1);
+						atflip.translate(o.getHFlip()?-bI.getWidth():0, o.getVFlip()?-bI.getHeight():0);
+						AffineTransformOp opflip = new AffineTransformOp(atflip, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+						bI = opflip.filter(bI, null);
+						
 						AffineTransform at = new AffineTransform();
 						at.setToScale(o.getScale(), o.getScale());
 						
@@ -167,6 +187,9 @@ public class BasicIO implements Engine {
 		active_object.add(o);
 		quad_tree.addObject(o);
 	}
+	public void addBackgroundObject(BasicObject o) {
+		background_object.add(o);
+	}
 		
 	public void fixedUpdate() {
 		StringBuilder sb = new StringBuilder();
@@ -195,6 +218,10 @@ public class BasicIO implements Engine {
 			ev_string = sb.toString();
 		}
 		
+		updateActive();
+		updateBackground();
+	}
+	private void updateActive() {
 		Iterator<BasicObject> itr = active_object.iterator();
 		while (itr.hasNext()) {
 			BasicObject o = itr.next();
@@ -202,6 +229,19 @@ public class BasicIO implements Engine {
 		}
 		
 		itr = active_object.iterator();
+		while (itr.hasNext()){
+			BasicObject o = itr.next();
+			o.postUpdate();
+		}
+	}
+	private void updateBackground() {
+		Iterator<BasicObject> itr = background_object.iterator();
+		while (itr.hasNext()) {
+			BasicObject o = itr.next();
+			o.fixedUpdate();
+		}
+		
+		itr = background_object.iterator();
 		while (itr.hasNext()){
 			BasicObject o = itr.next();
 			o.postUpdate();
