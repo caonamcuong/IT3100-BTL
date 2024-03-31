@@ -154,6 +154,10 @@ public class BasicIO implements Engine {
 		active_object.add(o);
 		quad_tree.addObject(o);
 	}
+	public void removeObject(BasicObject o) {
+		active_object.remove(o);
+		quad_tree.removeObject(o);
+	}
 	public void addBackgroundObject(BasicObject o) {
 		background_object.add(o);
 	}
