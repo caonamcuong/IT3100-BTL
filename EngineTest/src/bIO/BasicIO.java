@@ -37,6 +37,8 @@ public class BasicIO implements Engine {
 	private BasicQuadTree quad_tree;
 	private LinkedList<BasicObject> active_object;
 	private LinkedList<BasicObject> background_object;
+	private LinkedList<BasicObject> toadd_object;
+	private LinkedList<BasicObject> toremove_object;
 	
 	// test section remove later
 	private JComponent jc;
@@ -81,22 +83,21 @@ public class BasicIO implements Engine {
 		});
 		active_object = new LinkedList<BasicObject>();
 		background_object = new LinkedList<BasicObject>();
+		toadd_object = new LinkedList<BasicObject>();
+		toremove_object = new LinkedList<BasicObject>();
 		
 		//Test section remove later
 		jc = new JComponent() {
 			public void paintComponent(Graphics g) {
 				if (background_object.size()!=0) {
-					Iterator<BasicObject> itr = background_object.iterator();
-					drawList(itr, g);
+					drawList(background_object, g);
 				}
 				if (active_object.size()!=0) {
-					Iterator<BasicObject> itr = active_object.iterator();
-					drawList(itr, g);
+					drawList(active_object, g);
 				}
 			}
-			private void drawList(Iterator<BasicObject> itr, Graphics g) {
-				while (itr.hasNext()) {
-					BasicObject o = itr.next();
+			private void drawList(List<BasicObject> lst, Graphics g) {
+				for (BasicObject o : lst) {
 					BasicSprite sprite = o.getSprite();
 					if (sprite != null) {
 						BufferedImage bI = null;
@@ -151,12 +152,10 @@ public class BasicIO implements Engine {
 	}
 	
 	public void addObject(BasicObject o) {
-		active_object.add(o);
-		quad_tree.addObject(o);
+		toadd_object.add(o);
 	}
 	public void removeObject(BasicObject o) {
-		active_object.remove(o);
-		quad_tree.removeObject(o);
+		toremove_object.add(o);
 	}
 	public void addBackgroundObject(BasicObject o) {
 		background_object.add(o);
@@ -189,35 +188,25 @@ public class BasicIO implements Engine {
 			ev_string = sb.toString();
 		}
 		
-		updateActive();
-		updateBackground();
-	}
-	private void updateActive() {
-		Iterator<BasicObject> itr = active_object.iterator();
-		while (itr.hasNext()) {
-			BasicObject o = itr.next();
-			o.fixedUpdate();
-		}
+		updateList(active_object);
+		updateList(background_object);
 		
-		itr = active_object.iterator();
-		while (itr.hasNext()){
-			BasicObject o = itr.next();
-			o.postUpdate();
+		for (BasicObject o: toadd_object) {
+			active_object.add(o);
+			quad_tree.addObject(o);
 		}
+		for (BasicObject o: toremove_object) {
+			active_object.remove(o);
+			quad_tree.removeObject(o);
+		}
+		toadd_object.clear();
+		toremove_object.clear();
 	}
-	private void updateBackground() {
-		Iterator<BasicObject> itr = background_object.iterator();
-		while (itr.hasNext()) {
-			BasicObject o = itr.next();
-			o.fixedUpdate();
-		}
-		
-		itr = background_object.iterator();
-		while (itr.hasNext()){
-			BasicObject o = itr.next();
-			o.postUpdate();
-		}
+	private void updateList(List<BasicObject> lst) {
+		for (BasicObject o: lst) o.fixedUpdate();
+		for (BasicObject o: lst) o.postUpdate();
 	}
+
 	public void update() {
 		cur_time = System.nanoTime();
 		long new_past_time = past_time;
