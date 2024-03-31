@@ -244,6 +244,7 @@ public class BasicIO implements Engine {
 	public long getCurTime() { return cur_time; }
 	public static long getTimeStep() { return time_step; }
 	public static float getUnitStep(float u) { return u/time_step; }
+	public static long getStepPerSec() { return 1000000000L / time_step; }
 	public List<BasicObject> quadQueryObject(BoundingBox bbox) {
 		return quad_tree.queryObject(bbox);
 	}
