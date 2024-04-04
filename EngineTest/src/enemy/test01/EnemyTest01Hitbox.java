@@ -8,8 +8,9 @@ import bIO.BasicSprite;
 import bIO.BasicTimer;
 import bIO.BoundingBox;
 import bIO.Vec2f;
+import enemy.EnemyHurtBox;
 
-public class EnemyTest01Hitbox extends BasicObject {
+public class EnemyTest01Hitbox extends EnemyHurtBox {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", null);
 	}};

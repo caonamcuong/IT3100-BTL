@@ -64,7 +64,7 @@ public class EnemyPlayerTest extends BasicObject {
 					getBBox().getX().sub(new BasicNumber(128)),
 					getBBox().getY().sub(new BasicNumber(128))
 				));
-			List<BasicObject> enemyhitbox = o.stream().filter(i -> i instanceof EnemyTest01Hitbox).toList();
+			List<BasicObject> enemyhitbox = o.stream().filter(i -> i instanceof EnemyHurtBox).toList();
 			
 			canhit_timer.run();
 			for (BasicObject hb : enemyhitbox) {
