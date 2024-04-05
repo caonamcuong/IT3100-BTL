@@ -4,6 +4,7 @@ import bIO.BasicIO;
 import bIO.Vec2f;
 import enemy.test01.EnemyTest01;
 import enemy.test02.EnemyTest02;
+import enemy.test02.EnemyTest02V3;
 
 public class EnemyGameTest {
 	public static void main(String[] args) {
@@ -17,7 +18,7 @@ public class EnemyGameTest {
 			setPosition(new Vec2f(8 * 32f, 4 * 32f));
 		}};
 		bsio.addObject(en01);
-		EnemyTest01 en02 = new EnemyTest01(bsio) {{
+		EnemyTest02V3 en02 = new EnemyTest02V3(bsio) {{
 			setPosition(new Vec2f(10 * 32f, 4 * 32f));
 		}};
 		bsio.addObject(en02);
