@@ -1,5 +1,7 @@
 package bIO;
 
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import java.util.HashMap;
@@ -8,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+
 
 public class BasicSpriteManager {
 	HashMap<String, BufferedImage> texture_manager;
@@ -22,7 +26,19 @@ public class BasicSpriteManager {
 		if (textureExists(tex_name)) return;
 		BufferedImage img = null;
 		try {
-			img = ImageIO.read(new File(tex_name));
+			ImageIcon iicon = new ImageIcon(ImageIO.read(new File(tex_name)));
+			
+			img = new BufferedImage(
+				iicon.getIconWidth(),
+				iicon.getIconHeight(),
+				BufferedImage.TYPE_4BYTE_ABGR
+			);
+			Graphics2D g = img.createGraphics();
+			//g.setComposite(AlphaComposite.SrcOver);
+			iicon.paintIcon(null, g, 0, 0);
+			g.dispose();
+			
+			//img = ImageIO.read(new File(tex_name));
 		} catch (IOException e) {
 			throw new IOException("Cannot load texture");
 		}

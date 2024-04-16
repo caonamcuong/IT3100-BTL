@@ -13,6 +13,9 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Graphics;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsDevice.WindowTranslucency;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -43,14 +46,26 @@ public class BasicIO implements Engine {
 	// test section remove later
 	private JComponent jc;
 	
+	public static boolean getDebug() {return true;}
+	
 	public BasicIO() {
-		if (System.getProperty("sun.java2d.opengl") != null)
-			System.setProperty("sun.java2d.opengl", "true");
+		//if (System.getProperty("sun.java2d.opengl") != null)
+		//	System.setProperty("sun.java2d.opengl", "true");
 		input_queue = new LinkedList<InputEvent>();
 		pressing_keys = new TreeSet<Integer>();
 		past_time = System.nanoTime();
 		ev_label = new JLabel("Hello");
 		main_frame = new JFrame();
+		//main_frame.setUndecorated(true);
+		//main_frame.setOpacity(0.55f);
+		GraphicsEnvironment ge = 
+	            GraphicsEnvironment.getLocalGraphicsEnvironment();
+	        GraphicsDevice gd = ge.getDefaultScreenDevice();
+	        boolean isPerPixelTranslucencySupported = 
+	            gd.isWindowTranslucencySupported(WindowTranslucency.PERPIXEL_TRANSLUCENT);
+	    assert(isPerPixelTranslucencySupported);
+		
+		
 		sprite_man = new BasicSpriteManager();
 		quad_tree = new BasicQuadTree(new BoundingBox(
 				new BasicNumber(640*2), new BasicNumber(360*2), 
@@ -122,7 +137,9 @@ public class BasicIO implements Engine {
 						at.setToScale(o.getScale(), o.getScale());
 						
 						AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-						BufferedImage bIa = new BufferedImage((int)(bI.getWidth()*o.getScale()), (int)(bI.getHeight()*o.getScale()), BufferedImage.TYPE_3BYTE_BGR);
+						BufferedImage bIa = new BufferedImage((int)(bI.getWidth()*o.getScale()), 
+								(int)(bI.getHeight()*o.getScale()), 
+								BufferedImage.TYPE_4BYTE_ABGR);
 						op.filter(bI, bIa);
 						
 						Vec2f sprite_size = new Vec2f(new BasicNumber(bIa.getWidth()), 
@@ -143,6 +160,7 @@ public class BasicIO implements Engine {
 				}
 			}
 		};
+		jc.setOpaque(false);
 		main_frame.add(jc);
 		//End of test section
 		

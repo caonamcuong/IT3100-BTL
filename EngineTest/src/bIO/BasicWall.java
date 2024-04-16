@@ -15,19 +15,18 @@ public class BasicWall extends BasicObject {
 		setPosition(new Vec2f(0,0));
 		setBBox(new BoundingBox(32, 32));
 		setBBoxOrigin(new Vec2f(0, 0));
-		setBBoxDrawFlag(true);
-		
+		setBBoxDrawFlag(getIO().getDebug());
 	}
 	
 	@Override 
 	public void postUpdate() {
-		Vec2f old_pos = getPosition();
-		setPosition(getPosition().sub(new Vec2f(0.005f, 0)));
-		if (getPosition().getX().lt(getBBox().getWidth().mul(2).negate())) {
-			setPosition(getPosition().add(new Vec2f(640, 0)));
-		}
-		bboxUpdate();
-		getIO().quadUpdateObject(this, old_pos);
+		//Vec2f old_pos = getPosition();
+		//setPosition(getPosition().sub(new Vec2f(0.005f, 0)));
+		//if (getPosition().getX().lt(getBBox().getWidth().mul(2).negate())) {
+		//	setPosition(getPosition().add(new Vec2f(640, 0)));
+		//}
+		//bboxUpdate();
+		//getIO().quadUpdateObject(this, old_pos);
 		
 	}
 	

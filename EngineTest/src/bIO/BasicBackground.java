@@ -5,13 +5,14 @@ import java.util.TreeMap;
 
 public class BasicBackground extends BasicObject {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
-		put("idle", new BasicSprite (
-				"./src/bg.png",
-				Arrays.asList(0),
-				Arrays.asList(0),
-				Arrays.asList(607),
-				Arrays.asList(360)
-			));
+		//put("idle", new BasicSprite (
+		//		"./bin/bg.png",
+		//		Arrays.asList(0),
+		//		Arrays.asList(0),
+		//		Arrays.asList(607),
+		//		Arrays.asList(360)
+		//	));
+		put("idle", null);
 	}};
 	@Override
 	public BasicSprite getSprite() { return state_machine.get(getState()); }
