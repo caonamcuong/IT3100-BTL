@@ -8,6 +8,7 @@ import bIO.BasicWall;
 import bIO.BoundingBox;
 import bIO.Vec2f;
 import enemy.EnemyHurtBox;
+import enemy.test03.EnemyTest03;
 import player.Player;
 
 public class TestGame {
@@ -38,10 +39,8 @@ public class TestGame {
 		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(3*32), new BasicNumber(4*32))); bboxUpdate();}});
 		bsio.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(1*32), new BasicNumber(5*32))); bboxUpdate();}});
 		
-		bsio.addObject(new EnemyHurtBox(bsio) {{
-			setPosition(new Vec2f(32f*14, 32f*4));
-			setBBox(new BoundingBox(new Vec2f(32f, 32f)));
-			setBBoxOrigin(new Vec2f(0, 0));
+		bsio.addObject(new EnemyTest03(bsio) {{
+			setPosition(new Vec2f(32f*14, 32f*2));
 			setBBoxDrawFlag(getIO().getDebug());
 			bboxUpdate();
 		}});

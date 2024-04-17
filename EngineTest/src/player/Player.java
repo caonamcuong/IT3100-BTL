@@ -49,6 +49,7 @@ public class Player extends BasicObject {
 	@Override
 	public BasicSprite getSprite() { return state_machine.get(getState()); }
 	
+	private static final float grav_speed = 0.2f;
 	private static final float mov_speed = 800f;
 	private static final float jmp_speed = 400f;
 	private static final float float_speed = 0.63f;
@@ -228,7 +229,7 @@ public class Player extends BasicObject {
 	public void fixedUpdate() {
 		Vec2f mov_step = new Vec2f(0,0);
 		velocity.setX(new BasicNumber(0));
-		velocity = velocity.add(new BasicNumber(0), new BasicNumber(0.2f));
+		velocity = velocity.add(new BasicNumber(0), new BasicNumber(grav_speed));
 		
 		if (getState() == "idle") {
 			updateXDirection();
