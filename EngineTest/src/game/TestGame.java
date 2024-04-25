@@ -10,6 +10,7 @@ import bIO.Vec2f;
 import enemy.EnemyHurtBox;
 import enemy.test03.EnemyTest03;
 import player.Player;
+import ui.Clock;
 
 public class TestGame {
 	public static void main(String[] args) {
@@ -45,8 +46,9 @@ public class TestGame {
 			bboxUpdate();
 		}});
 		
-		bsio.addBackgroundObject(new BasicBackground(bsio) {{setPosition(new Vec2f(0, 0));}});
-		bsio.addBackgroundObject(new BasicBackground(bsio) {{setPosition(new Vec2f(607, 0));}});
+		//bsio.addBackgroundObject(new BasicBackground(bsio) {{setPosition(new Vec2f(0, 0));}});
+		//bsio.addBackgroundObject(new BasicBackground(bsio) {{setPosition(new Vec2f(607, 0));}});
+		bsio.addBackgroundObject(new Clock(bsio) {{setPosition(new Vec2f(40, 40));}});
 		
 		bsio.run();
 	}
