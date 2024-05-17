@@ -38,7 +38,9 @@ public class BasicObject {
 	
 	public void fixedUpdate() {}
 	public void postUpdate() {
+		Vec2f old_pos = getBBox().position;
 		bboxUpdate();
+		getIO().quadUpdateObject(this, old_pos);
 	}
 	public void collideWith(BasicObject o) {}
 	

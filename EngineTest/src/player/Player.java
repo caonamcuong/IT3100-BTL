@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.TreeMap;
 
+import bIO.BasicController;
 import bIO.BasicIO;
 import bIO.BasicNumber;
 import bIO.BasicObject;
@@ -45,13 +46,14 @@ public class Player extends BasicObject {
 			Arrays.asList(96),
 			Arrays.asList(39)
 		));
+		put("gameover", null);
 	}};
 	@Override
 	public BasicSprite getSprite() { return state_machine.get(getState()); }
 	
 	private static final float grav_speed = 0.2f;
 	private static final float mov_speed = 800f;
-	private static final float jmp_speed = 400f;
+	private static final float jmp_speed = 1200f;
 	private static final float float_speed = 0.63f;
 	private static final long attack_time = BasicIO.getStepPerSec();
 	private static final long attack_delay = (long)((double)BasicIO.getStepPerSec() / 9. * 4);
@@ -82,11 +84,11 @@ public class Player extends BasicObject {
 	private boolean hurt_knockback;
 	private BasicTimer hurt_timer;
 	
-	public Player(BasicIO io) {
+	public Player(BasicIO io, BasicController controller) {
 		super(io);
 		setState("idle");
 		setPosition(new Vec2f(0,0));
-		setBBox(new BoundingBox(16, 32));
+		setBBox(new BoundingBox(16, 24));
 		setBBoxOrigin(new Vec2f(0.5f, 1.0f));
 		setBBoxDrawFlag(io.getDebug());
 		setSpriteOrigin(new Vec2f(0.5f, 1.0f));
@@ -126,7 +128,7 @@ public class Player extends BasicObject {
 		});
 		attack_spawn_timer = new BasicTimer(attack_delay, new Runnable() {
 			public void run() {
-				aPlayer.getIO().addObject(
+				controller.addObject(
 					new PlayerHitbox(getIO(), 
 						aPlayer.getPosition().add(new Vec2f(direction==0?32f:-32f, -16f)),
 					new Vec2f(48, 32),
@@ -216,17 +218,22 @@ public class Player extends BasicObject {
 	}
 	private void updateHurtYMovement() {
 		hurt_knockback = true;
-		velocity.setY(new BasicNumber(-jmp_speed));
+		velocity.setY(new BasicNumber(-jmp_speed*2));
 	}
 	private void updateHurtXMovement() {
 		if (hurt_knockback) {
 			int movx = direction==0?-1:1;
-			velocity.setX(new BasicNumber(movx*mov_speed*0.5));
+			velocity.setX(new BasicNumber(movx*mov_speed));
 		}
 	}
 	
 	@Override
 	public void fixedUpdate() {
+		if (getState() == "gameover") {
+			System.out.println("over");
+			return;
+		}
+		
 		Vec2f mov_step = new Vec2f(0,0);
 		velocity.setX(new BasicNumber(0));
 		velocity = velocity.add(new BasicNumber(0), new BasicNumber(grav_speed));
@@ -269,6 +276,10 @@ public class Player extends BasicObject {
 		else if (getState() == "hurt") {
 			hurt_timer.run();
 			updateHurtXMovement();
+		}
+		
+		if (getPosition().getY().toFloat() > 360) {
+			setState("gameover");
 		}
 		
 		List<BasicObject> o = getIO().quadQueryObject(new BoundingBox(

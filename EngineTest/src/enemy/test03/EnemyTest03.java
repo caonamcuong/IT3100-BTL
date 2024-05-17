@@ -82,7 +82,7 @@ public class EnemyTest03 extends EnemyHurtBox {
 	public void fixedUpdate() {
 		Vec2f mov_step = new Vec2f(0,0);
 		velocity.setX(new BasicNumber(0));
-		velocity = velocity.add(new BasicNumber(0), new BasicNumber(0.2f));
+		velocity = velocity.add(new BasicNumber(0), new BasicNumber(grav_speed));
 		
 		List<BasicObject> o = getIO().quadQueryObject(new BoundingBox(
 				new BasicNumber(detect_xrange*2), new BasicNumber(detect_yrange*2),

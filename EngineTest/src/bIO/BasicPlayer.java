@@ -170,8 +170,9 @@ public class BasicPlayer extends BasicObject {
 		}
 		if (velocity.getX().gt(0)) setHFlip(false);
 		else if (velocity.getX().lt(0)) setHFlip(true);
-		Vec2f old_pos = getPosition();
-		setPosition(getPosition().sub(new Vec2f(0.005f, 0)));
+
+		//setPosition(getPosition().sub(new Vec2f(0.005f, 0)));
+		Vec2f old_pos = getBBox().position;
 		bboxUpdate();
 		getIO().quadUpdateObject(this, old_pos);
 	}

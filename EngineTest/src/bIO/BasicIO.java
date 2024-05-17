@@ -1,5 +1,6 @@
 package bIO;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,10 +39,10 @@ public class BasicIO implements Engine {
 	private Timer main_loop;
 	private BasicSpriteManager sprite_man;
 	private BasicQuadTree quad_tree;
-	private LinkedList<BasicObject> active_object;
-	private LinkedList<BasicObject> background_object;
-	private LinkedList<BasicObject> toadd_object;
-	private LinkedList<BasicObject> toremove_object;
+	private List<BasicObject> active_object;
+	private List<BasicObject> background_object;
+	private List<BasicObject> toadd_object;
+	private List<BasicObject> toremove_object;
 	
 	// test section remove later
 	private JComponent jc;
@@ -70,7 +71,7 @@ public class BasicIO implements Engine {
 		quad_tree = new BasicQuadTree(new BoundingBox(
 				new BasicNumber(640*2), new BasicNumber(360*2), 
 				new BasicNumber(-320), new BasicNumber(-180)), 
-			128);
+			1000);
 		
 		main_frame.setSize(640,360);
 		main_frame.setFocusable(true);
@@ -96,10 +97,10 @@ public class BasicIO implements Engine {
 				update();
 			}
 		});
-		active_object = new LinkedList<BasicObject>();
-		background_object = new LinkedList<BasicObject>();
-		toadd_object = new LinkedList<BasicObject>();
-		toremove_object = new LinkedList<BasicObject>();
+		active_object = Collections.synchronizedList(new LinkedList<BasicObject>());
+		background_object = Collections.synchronizedList(new LinkedList<BasicObject>());
+		toadd_object = Collections.synchronizedList(new LinkedList<BasicObject>());
+		toremove_object = Collections.synchronizedList(new LinkedList<BasicObject>());
 		
 		//Test section remove later
 		jc = new JComponent() {
@@ -220,11 +221,16 @@ public class BasicIO implements Engine {
 		toadd_object.clear();
 		toremove_object.clear();
 	}
-	private void updateList(List<BasicObject> lst) {
+	protected void updateList(List<BasicObject> lst) {
 		for (BasicObject o: lst) o.fixedUpdate();
+	}
+	public void postUpdate() {
+		updateListPost(active_object);
+	}
+	protected void updateListPost(List<BasicObject> lst) {
 		for (BasicObject o: lst) o.postUpdate();
 	}
-
+	
 	public void update() {
 		cur_time = System.nanoTime();
 		long new_past_time = past_time;
@@ -232,6 +238,7 @@ public class BasicIO implements Engine {
 				elapsed_time >= time_step; 
 				elapsed_time -= time_step, new_past_time += time_step) {
 			fixedUpdate();
+			postUpdate();
 		}
 		Iterator<BasicObject> itr = active_object.iterator();
 		while (itr.hasNext()) {

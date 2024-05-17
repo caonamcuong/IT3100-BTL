@@ -65,15 +65,15 @@ public class BasicQuadTree {
 			), n);
 		
 		for (BasicObject o: n.list_object) {
-			if (n.nw.bbox.containPoint(o.getPosition())) {
+			if (n.nw.bbox.containPoint(o.getBBox().getPosition())) {
 				n.nw.list_object.add(o);
 				n.nw.cur_object += 1;
 			}
-			else if (n.ne.bbox.containPoint(o.getPosition())) {
+			else if (n.ne.bbox.containPoint(o.getBBox().getPosition())) {
 				n.ne.list_object.add(o);
 				n.ne.cur_object += 1;
 			}
-			else if (n.sw.bbox.containPoint(o.getPosition())) {
+			else if (n.sw.bbox.containPoint(o.getBBox().getPosition())) {
 				n.sw.list_object.add(o);
 				n.sw.cur_object += 1;
 			}
@@ -112,9 +112,9 @@ public class BasicQuadTree {
 	public void addObject(BasicObject o) {
 		Node n = getRoot();
 		while (n.cur_object == -1) {
-			if (n.nw.bbox.containPoint(o.getPosition())) n = n.nw;
-			else if (n.ne.bbox.containPoint(o.getPosition())) n = n.ne;
-			else if (n.sw.bbox.containPoint(o.getPosition())) n = n.sw;
+			if (n.nw.bbox.containPoint(o.getBBox().getPosition())) n = n.nw;
+			else if (n.ne.bbox.containPoint(o.getBBox().getPosition())) n = n.ne;
+			else if (n.sw.bbox.containPoint(o.getBBox().getPosition())) n = n.sw;
 			else n = n.se;
 		}
 		n.list_object.add(o);
@@ -124,9 +124,9 @@ public class BasicQuadTree {
 	public void removeObject(BasicObject o) {
 		Node n = getRoot();
 		while (n.cur_object == -1) {
-			if (n.nw.bbox.containPoint(o.getPosition())) n = n.nw;
-			else if (n.ne.bbox.containPoint(o.getPosition())) n = n.ne;
-			else if (n.sw.bbox.containPoint(o.getPosition())) n = n.sw;
+			if (n.nw.bbox.containPoint(o.getBBox().getPosition())) n = n.nw;
+			else if (n.ne.bbox.containPoint(o.getBBox().getPosition())) n = n.ne;
+			else if (n.sw.bbox.containPoint(o.getBBox().getPosition())) n = n.sw;
 			else n = n.se;
 		}
 		n.list_object.remove(o);
@@ -141,7 +141,7 @@ public class BasicQuadTree {
 			else if (n.sw.bbox.containPoint(old_pos)) n = n.sw;
 			else n = n.se;
 		}
-		if (!n.bbox.containPoint(o.getPosition())) {
+		if (!n.bbox.containPoint(o.getBBox().getPosition())) {
 			n.list_object.remove(o);
 			n.cur_object -= 1;
 			addObject(o);
@@ -165,7 +165,7 @@ public class BasicQuadTree {
 		else {
 			if (n.cur_object != -1) {
 				for (BasicObject o: n.list_object) {
-					if (bbox.containPoint(o.getPosition())) {
+					if (bbox.containPoint(o.getBBox().getPosition())) {
 						l.add(o);
 					}
 				}
