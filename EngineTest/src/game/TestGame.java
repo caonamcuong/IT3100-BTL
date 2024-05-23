@@ -9,6 +9,7 @@ import bIO.Vec2f;
 import controller.SlideController;
 import enemy.test03.EnemyController;
 import enemy.test03.EnemyTest03;
+import frame.FrameGenerator;
 import map.map;
 import player.Player;
 import ui.Clock;
@@ -24,36 +25,27 @@ public class TestGame {
 		
 		BasicIO bsio = new BasicIO();
 		SlideController controller = new SlideController(bsio);
-		Player player = new Player(bsio, controller);
-		player.setPosition(new Vec2f(120,48));
-		player.bboxUpdate();
-		controller.addMainPlayer(player);
-		for (int i = 0; i < 20; ++i) {
-			if (i == 2) continue;
-		  	for (int j = 6; j <= 9; ++j) {
-			BasicNumber xx = new BasicNumber(i * 32f);
-			BasicNumber yy = new BasicNumber(j * 32f);
-			controller.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(xx, yy)); bboxUpdate();}});
-			}
-		}
-		controller.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(4*32), new BasicNumber(5*32))); bboxUpdate();}});
-		controller.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(5*32), new BasicNumber(5*32))); bboxUpdate();}});
-		controller.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(7*32), new BasicNumber(3*32))); bboxUpdate();}});
-		controller.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(9*32), new BasicNumber(5*32))); bboxUpdate();}});
-		controller.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(11*32), new BasicNumber(5*32))); bboxUpdate();}});
-		controller.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(11*32), new BasicNumber(4*32))); bboxUpdate();}});
-		controller.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(3*32), new BasicNumber(5*32))); bboxUpdate();}});
-		controller.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(3*32), new BasicNumber(4*32))); bboxUpdate();}});
-	   	controller.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(new BasicNumber(1*32), new BasicNumber(5*32))); bboxUpdate();}});
-		
+		//Player player = new Player(bsio, controller);
+		//player.setPosition(new Vec2f(120,48));
+		//player.bboxUpdate();
+		//controller.addMainPlayer(player);
+		//for (int i = 0; i < 40; ++i) {
+		//	if (i == 2) continue;
+		//  	for (int j = 6; j <= 9; ++j) {
+		//	BasicNumber xx = new BasicNumber(i * 32f);
+		//	BasicNumber yy = new BasicNumber(j * 32f);
+		//	controller.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(xx, yy)); bboxUpdate();}});
+		//	}
+		//}
+
+		bsio.addBackgroundObject(new BasicBackground(bsio) {{setPosition(new Vec2f(0, 0));}});
+		bsio.addBackgroundObject(new BasicBackground(bsio) {{setPosition(new Vec2f(640, 0));}});
 		
 		bsio.addObject(controller);
-		bsio.addBackgroundObject(new map(bsio, controller, bsio.getStepPerSec() * 2));
+		//bsio.addBackgroundObject(new FrameGenerator(bsio, controller, bsio.getStepPerSec() * 10));
+		//bsio.addBackgroundObject(new map(bsio, controller, bsio.getStepPerSec() * 2));
 		//bsio.addBackgroundObject(new EnemyController(bsio, controller, new Vec2f(32f*14, 32f*2)));
-		
-		//bsio.addBackgroundObject(new BasicBackground(bsio) {{setPosition(new Vec2f(0, 0));}});
-		//bsio.addBackgroundObject(new BasicBackground(bsio) {{setPosition(new Vec2f(607, 0));}});
-		bsio.addBackgroundObject(new Clock(bsio) {{setPosition(new Vec2f(40, 40));}});
+		//bsio.addBackgroundObject(new Clock(bsio) {{setPosition(new Vec2f(40, 40));}});
 		
 		bsio.run();
 	}

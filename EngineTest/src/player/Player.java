@@ -52,8 +52,9 @@ public class Player extends BasicObject {
 	public BasicSprite getSprite() { return state_machine.get(getState()); }
 	
 	private static final float grav_speed = 0.2f;
-	private static final float mov_speed = 800f;
+	private static final float mov_speed = 1200f;
 	private static final float jmp_speed = 1200f;
+	private static final float knockback_speed = 600f;
 	private static final float float_speed = 0.63f;
 	private static final long attack_time = BasicIO.getStepPerSec();
 	private static final long attack_delay = (long)((double)BasicIO.getStepPerSec() / 9. * 4);
@@ -218,7 +219,7 @@ public class Player extends BasicObject {
 	}
 	private void updateHurtYMovement() {
 		hurt_knockback = true;
-		velocity.setY(new BasicNumber(-jmp_speed*2));
+		velocity.setY(new BasicNumber(-knockback_speed));
 	}
 	private void updateHurtXMovement() {
 		if (hurt_knockback) {
@@ -230,7 +231,6 @@ public class Player extends BasicObject {
 	@Override
 	public void fixedUpdate() {
 		if (getState() == "gameover") {
-			System.out.println("over");
 			return;
 		}
 		

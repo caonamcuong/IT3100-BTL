@@ -1,5 +1,6 @@
 package bIO;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class BasicQuadTree {
 		n.p = p;
 		n.nw = n.ne = n.sw = n.se = nil;
 		n.cur_object = 0;
-		n.list_object = new LinkedList<BasicObject>();
+		n.list_object = Collections.synchronizedList(new LinkedList<BasicObject>());
 		return n;
 	}
 	private Node getRoot() {
@@ -89,25 +90,6 @@ public class BasicQuadTree {
 		splitNode(n.nw); splitNode(n.ne);
 		splitNode(n.sw); splitNode(n.se);
 	}
-	private void mergeNode(Node n) {
-		if (n.cur_object != -1) return;
-		if (n.nw.cur_object == -1 || n.ne.cur_object == -1 ||
-				n.sw.cur_object == -1 || n.se.cur_object == -1)
-			return;
-		if (n.nw.cur_object + n.ne.cur_object + n.sw.cur_object + n.se.cur_object > max_object) return;
-		
-		for (BasicObject o: n.nw.list_object) n.list_object.add(o);
-		for (BasicObject o: n.ne.list_object) n.list_object.add(o);
-		for (BasicObject o: n.sw.list_object) n.list_object.add(o);
-		for (BasicObject o: n.se.list_object) n.list_object.add(o);
-		n.nw.list_object.clear();
-		n.ne.list_object.clear();
-		n.sw.list_object.clear();
-		n.se.list_object.clear();
-		
-		n.cur_object = n.nw.cur_object + n.ne.cur_object + n.sw.cur_object + n.se.cur_object;
-		n.nw = n.ne = n.sw = n.se = nil;
-	}
 	
 	public void addObject(BasicObject o) {
 		Node n = getRoot();
@@ -131,7 +113,6 @@ public class BasicQuadTree {
 		}
 		n.list_object.remove(o);
 		n.cur_object -= 1;
-		if (n != getRoot()) mergeNode(n.p);
 	}
 	public void updateObject(BasicObject o, Vec2f old_pos) {
 		Node n = getRoot();
@@ -145,7 +126,6 @@ public class BasicQuadTree {
 			n.list_object.remove(o);
 			n.cur_object -= 1;
 			addObject(o);
-			if (n != getRoot()) mergeNode(n.p);
 		}
 	}
 	private void queryObjectAll(List<BasicObject> l, Node n) {

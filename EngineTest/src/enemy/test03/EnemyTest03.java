@@ -77,6 +77,10 @@ public class EnemyTest03 extends EnemyHurtBox {
 		});
 		detect_flag = false;
 	}
+	public EnemyTest03(BasicIO io, float x, float y) {
+		this(io);
+		setPosition(new Vec2f(x,y));
+	}
 	
 	@Override
 	public void fixedUpdate() {

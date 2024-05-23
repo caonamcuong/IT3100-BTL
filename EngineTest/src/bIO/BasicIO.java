@@ -43,6 +43,8 @@ public class BasicIO implements Engine {
 	private List<BasicObject> background_object;
 	private List<BasicObject> toadd_object;
 	private List<BasicObject> toremove_object;
+	private List<BasicObject> toadd_background;
+	private List<BasicObject> toremove_background;
 	
 	// test section remove later
 	private JComponent jc;
@@ -68,10 +70,10 @@ public class BasicIO implements Engine {
 		
 		
 		sprite_man = new BasicSpriteManager();
-		quad_tree = new BasicQuadTree(new BoundingBox(
-				new BasicNumber(640*2), new BasicNumber(360*2), 
-				new BasicNumber(-320), new BasicNumber(-180)), 
-			1000);
+		//quad_tree = new BasicQuadTree(new BoundingBox(
+		//		new BasicNumber(640*2), new BasicNumber(360*2), 
+		//		new BasicNumber(-320), new BasicNumber(-180)), 
+		//	100);
 		
 		main_frame.setSize(640,360);
 		main_frame.setFocusable(true);
@@ -101,6 +103,8 @@ public class BasicIO implements Engine {
 		background_object = Collections.synchronizedList(new LinkedList<BasicObject>());
 		toadd_object = Collections.synchronizedList(new LinkedList<BasicObject>());
 		toremove_object = Collections.synchronizedList(new LinkedList<BasicObject>());
+		toadd_background = Collections.synchronizedList(new LinkedList<BasicObject>());
+		toremove_background = Collections.synchronizedList(new LinkedList<BasicObject>());
 		
 		//Test section remove later
 		jc = new JComponent() {
@@ -177,7 +181,10 @@ public class BasicIO implements Engine {
 		toremove_object.add(o);
 	}
 	public void addBackgroundObject(BasicObject o) {
-		background_object.add(o);
+		toadd_background.add(o);
+	}
+	public void removeBackgroundObject(BasicObject o) {
+		toremove_background.add(o);
 	}
 		
 	public void fixedUpdate() {
@@ -212,14 +219,22 @@ public class BasicIO implements Engine {
 		
 		for (BasicObject o: toadd_object) {
 			active_object.add(o);
-			quad_tree.addObject(o);
+			//quad_tree.addObject(o);
 		}
 		for (BasicObject o: toremove_object) {
 			active_object.remove(o);
-			quad_tree.removeObject(o);
+			//quad_tree.removeObject(o);
+		}
+		for (BasicObject o: toadd_background) {
+			background_object.add(o);
+		}
+		for (BasicObject o: toremove_background) {
+			background_object.remove(o);
 		}
 		toadd_object.clear();
 		toremove_object.clear();
+		toadd_background.clear();
+		toremove_background.clear();
 	}
 	protected void updateList(List<BasicObject> lst) {
 		for (BasicObject o: lst) o.fixedUpdate();
@@ -249,8 +264,16 @@ public class BasicIO implements Engine {
 		past_time = new_past_time;
 	}
 	public void render() {
-		ev_label.setText(ev_string);
+		//ev_label.setText(ev_string);
 		jc.repaint();
+	}
+	
+	// duct tape
+	public void reset() {
+		//quad_tree = new BasicQuadTree(new BoundingBox(
+		//		new BasicNumber(640*2), new BasicNumber(360*2), 
+		//		new BasicNumber(-320), new BasicNumber(-180)), 
+		//	100);
 	}
 	
 	public void run() {
@@ -264,9 +287,14 @@ public class BasicIO implements Engine {
 	public static float getUnitStep(float u) { return u/time_step; }
 	public static long getStepPerSec() { return 1000000000L / time_step; }
 	public List<BasicObject> quadQueryObject(BoundingBox bbox) {
-		return quad_tree.queryObject(bbox);
+		List<BasicObject> ret = Collections.synchronizedList(new LinkedList<BasicObject>());
+		for (BasicObject o: active_object) {
+			if (bbox.collideWith(o.getBBox())) ret.add(o);
+		}
+		
+		return ret;
 	}
 	public void quadUpdateObject(BasicObject o, Vec2f old_pos) {
-		quad_tree.updateObject(o, old_pos);
+		//quad_tree.updateObject(o, old_pos);
 	}
 }

@@ -20,22 +20,19 @@ public class Clock extends BasicObject {
 	private int elapsed = 0;
 	private BasicTimer bTm;
 	
-	CharacterDigitBlack m1, m2, colon, s1, s2;
+	CharacterDigit m1, m2, colon, s1, s2;
+	boolean canInit;
+	boolean stopped;
 	
 	public Clock(BasicIO io) {
 		super(io);
 		elapsed = 0;
-		m1 = new CharacterDigitBlack(io);
-		m2 = new CharacterDigitBlack(io);
-		colon = new CharacterDigitBlack(io);
-		s1 = new CharacterDigitBlack(io);
-		s2 = new CharacterDigitBlack(io);
-		
-		io.addBackgroundObject(m1);
-		io.addBackgroundObject(m2);
-		io.addBackgroundObject(colon);
-		io.addBackgroundObject(s1);
-		io.addBackgroundObject(s2);
+		m1 = new CharacterDigit(io);
+		m2 = new CharacterDigit(io);
+		colon = new CharacterDigit(io);
+		s1 = new CharacterDigit(io);
+		s2 = new CharacterDigit(io);
+		canInit = true;
 		
 		Clock a = this;
 		bTm = new BasicTimer(step, new Runnable() {
@@ -73,6 +70,7 @@ public class Clock extends BasicObject {
 	}
 	
 	private void incTime() {
+		if (stopped) return;
 		elapsed += 1;
 		int min = elapsed / 60;
 		int sec = elapsed - min * 60;
@@ -80,5 +78,33 @@ public class Clock extends BasicObject {
 		m2.setState(Integer.toString(min%10));
 		s1.setState(Integer.toString(sec/10));
 		s2.setState(Integer.toString(sec%10));
+	}
+	
+	public void init() {
+		if (!canInit) return;
+		getIO().addBackgroundObject(m1);
+		getIO().addBackgroundObject(m2);
+		getIO().addBackgroundObject(colon);
+		getIO().addBackgroundObject(s1);
+		getIO().addBackgroundObject(s2);
+		stopped = false;
+		canInit = false;
+	}
+	public void reset() {
+		elapsed = 0;
+		stopped = false;
+	}
+	public void stop() {
+		stopped = true;
+	}
+	public void destroy() {
+		if (canInit) return;
+		getIO().removeBackgroundObject(m1);
+		getIO().removeBackgroundObject(m2);
+		getIO().removeBackgroundObject(colon);
+		getIO().removeBackgroundObject(s1);
+		getIO().removeBackgroundObject(s2);
+		canInit = true;
+		stopped = true;
 	}
 }

@@ -37,12 +37,16 @@ public class ground extends BasicWall {
 		setBBoxDrawFlag(true);
 		
 		wall = new BasicWall[5];
-		loaded = true;
+		loaded=true;
 		for (int i = 0; i < 5 ; ++i) {
 			wall[i] = new BasicWall(io, 40, 20);
 			wall[i].setPosition(getPosition().add(new BasicNumber(40*i), new BasicNumber(0)));
 			controller.addObject(wall[i]);
 		}
+	}
+	public ground(BasicIO io, BasicController controller, float x, float y) {
+		this(io, controller);
+		setPosition(new Vec2f(x, y));
 	}
 	@Override
 	public void setPosition(Vec2f pos) {
