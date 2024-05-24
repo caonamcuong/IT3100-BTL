@@ -20,10 +20,10 @@ public class Player extends BasicObject {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
 			"src/player.png",
-			Arrays.asList(0,96,96*2,96*3,96*4,96*5),
-			Arrays.asList(39,39,39,39,39,39),
-			Arrays.asList(96,96,96,96,96,96),
-			Arrays.asList(39,39,39,39,39,39)
+			Arrays.asList(0 ,96,96*2,96*3,96*4,96*5),
+			Arrays.asList(39,39,39  ,39  ,39  ,39),
+			Arrays.asList(96,96,96  ,96  ,96  ,96),
+			Arrays.asList(39,39,39  ,39  ,39  ,39)
 		));
 		put ("jump", new BasicSprite (
 			"src/player.png",
