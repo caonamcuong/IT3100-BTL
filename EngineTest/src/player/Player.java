@@ -129,6 +129,7 @@ public class Player extends BasicObject {
 		});
 		attack_spawn_timer = new BasicTimer(attack_delay, new Runnable() {
 			public void run() {
+				getIO().playSound("src/smb_kick.wav");
 				controller.addObject(
 					new PlayerHitbox(getIO(), 
 						aPlayer.getPosition().add(new Vec2f(direction==0?32f:-32f, -16f)),
@@ -170,6 +171,7 @@ public class Player extends BasicObject {
 		int movy = 0;
 		if (getIO().isPressing(KEY_UP)) {
 			if (can_jump) {
+				getIO().playSound("src/smb_jump-small.wav");
 				movy = 1;
 				can_jump = false;
 				holding_jump = true;
@@ -227,6 +229,12 @@ public class Player extends BasicObject {
 			velocity.setX(new BasicNumber(movx*mov_speed));
 		}
 	}
+	private void setHurt() {
+		getIO().playSound("src/smb_bump.wav");
+		setState("hurt");
+		updateHurtYMovement();
+		hurt_timer.setup();
+	}
 	
 	@Override
 	public void fixedUpdate() {
@@ -248,9 +256,7 @@ public class Player extends BasicObject {
 				setState("attack");
 			}
 			else if (updateEnemy()) {
-				setState("hurt");
-				updateHurtYMovement();
-				hurt_timer.setup();
+				setHurt();
 			}
 		}
 		else if (getState() == "jump") {
@@ -258,9 +264,7 @@ public class Player extends BasicObject {
 			updateYMovement();
 			
 			if (updateEnemy()) {
-				setState("hurt");
-				updateHurtYMovement();
-				hurt_timer.setup();
+				setHurt();
 			}
 		}
 		else if (getState() == "attack") {
@@ -268,9 +272,7 @@ public class Player extends BasicObject {
 			attack_spawn_timer.run();
 			
 			if (updateEnemy()) {
-				setState("hurt");
-				updateHurtYMovement();
-				hurt_timer.setup();
+				setHurt();
 			}
 		}
 		else if (getState() == "hurt") {

@@ -23,25 +23,25 @@ import player.PlayerHitbox;
 public class EnemyTest04 extends EnemyHurtBox {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
-				"src/goomba.png",
-				Arrays.asList(3),
-				Arrays.asList(155),
-				Arrays.asList(19),
-				Arrays.asList(19)
+				"src/skull2.png",
+				Arrays.asList(0),
+				Arrays.asList(0),
+				Arrays.asList(20),
+				Arrays.asList(20)
 			));
 		put("detecting", new BasicSprite (
-				"src/goomba.png",
-				Arrays.asList(3),
-				Arrays.asList(155),
-				Arrays.asList(19),
-				Arrays.asList(19)
+				"src/skull2.png",
+				Arrays.asList(0),
+				Arrays.asList(0),
+				Arrays.asList(20),
+				Arrays.asList(20)
 			));
 		put("attack", new BasicSprite (
-				"src/goomba.png",
-				Arrays.asList(3),
-				Arrays.asList(155),
-				Arrays.asList(19),
-				Arrays.asList(19)
+				"src/skull2.png",
+				Arrays.asList(20),
+				Arrays.asList(0),
+				Arrays.asList(20),
+				Arrays.asList(20)
 			));
 		put ("exploding", null);
 		put ("destroying", null);
@@ -69,11 +69,11 @@ public class EnemyTest04 extends EnemyHurtBox {
 		super(io);
 		setState("idle");
 		setPosition(new Vec2f(0,0));
-		setBBox(new BoundingBox(19, 19));
+		setBBox(new BoundingBox(22, 22));
 		setBBoxOrigin(new Vec2f(0.5f, 1.0f));
 		setBBoxDrawFlag(getIO().getDebug());
 		setSpriteOrigin(new Vec2f(0.5f, 1.0f));
-		setScale(1f);
+		setScale(1.5f);
 		control = null;
 		
 		velocity = new Vec2f(0,0);
@@ -115,6 +115,7 @@ public class EnemyTest04 extends EnemyHurtBox {
 		}
 		else if (getState() == "exploding") {
 			if (control != null) {
+				getIO().playSound("src/smb_fireball.wav");
 				long dir = direction == 0 ? -1: 1;
 				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(-1200*dir, 0)));
 				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(-1200*dir, 500)));
@@ -167,6 +168,7 @@ public class EnemyTest04 extends EnemyHurtBox {
 				detect_timer.run();
 				
 				if (detect_flag) {
+					getIO().playSound("src/smb_fireball.wav");
 					detect_flag = false;
 					velocity.setY(new BasicNumber(-jmp_speed));
 					explode_timer.setup();

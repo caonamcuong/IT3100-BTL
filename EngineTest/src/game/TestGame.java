@@ -13,6 +13,7 @@ import frame.FrameGenerator;
 import map.map;
 import player.Player;
 import ui.Clock;
+import ui.FlameWall;
 
 public class TestGame {
 	public static void main(String[] args) {
@@ -40,6 +41,7 @@ public class TestGame {
 
 		bsio.addBackgroundObject(new BasicBackground(bsio) {{setPosition(new Vec2f(0, 0));}});
 		bsio.addBackgroundObject(new BasicBackground(bsio) {{setPosition(new Vec2f(640, 0));}});
+		bsio.addObject(new FlameWall(bsio));
 		
 		bsio.addObject(controller);
 		//bsio.addBackgroundObject(new FrameGenerator(bsio, controller, bsio.getStepPerSec() * 10));

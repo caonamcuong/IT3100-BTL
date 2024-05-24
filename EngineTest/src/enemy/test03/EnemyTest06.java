@@ -168,6 +168,7 @@ public class EnemyTest06 extends EnemyHurtBox {
 			}
 		}
 		else if (getState() == "attack") {
+			getIO().playSound("src/smb_fireball.wav");
 			control.addObject(new EnemyTest02Bullet(getIO(), getPosition().sub(new Vec2f(0, 10)), shoot_direction.mul(new BasicNumber(500f))));
 			//setState("idle");
 			setState("non");

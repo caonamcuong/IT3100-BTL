@@ -21,25 +21,25 @@ import player.PlayerHitbox;
 public class EnemyTest03 extends EnemyHurtBox {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
-				"src/goomba.png",
-				Arrays.asList(3),
-				Arrays.asList(155),
-				Arrays.asList(19),
-				Arrays.asList(19)
+				"src/skull.png",
+				Arrays.asList(0),
+				Arrays.asList(24),
+				Arrays.asList(20),
+				Arrays.asList(24)
 			));
 		put("detecting", new BasicSprite (
-				"src/goomba.png",
-				Arrays.asList(3),
-				Arrays.asList(155),
-				Arrays.asList(19),
-				Arrays.asList(19)
+				"src/skull.png",
+				Arrays.asList(0),
+				Arrays.asList(0),
+				Arrays.asList(20),
+				Arrays.asList(24)
 			));
 		put("attack", new BasicSprite (
-				"src/goomba.png",
-				Arrays.asList(3),
-				Arrays.asList(155),
-				Arrays.asList(19),
-				Arrays.asList(19)
+				"src/skull.png",
+				Arrays.asList(0),
+				Arrays.asList(48),
+				Arrays.asList(20),
+				Arrays.asList(24)
 			));
 		put ("destroying", null);
 		put ("destroyed", null);
@@ -63,7 +63,7 @@ public class EnemyTest03 extends EnemyHurtBox {
 		super(io);
 		setState("idle");
 		setPosition(new Vec2f(0,0));
-		setBBox(new BoundingBox(19, 19));
+		setBBox(new BoundingBox(18, 20));
 		setBBoxOrigin(new Vec2f(0.5f, 1.0f));
 		setBBoxDrawFlag(getIO().getDebug());
 		setSpriteOrigin(new Vec2f(0.5f, 1.0f));
@@ -138,6 +138,7 @@ public class EnemyTest03 extends EnemyHurtBox {
 				detect_timer.run();
 				
 				if (detect_flag) {
+					getIO().playSound("src/smb_fireball.wav");
 					detect_flag = false;
 					velocity.setY(new BasicNumber(-jmp_speed));
 					setState("attack");

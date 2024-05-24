@@ -163,7 +163,7 @@ public class FrameTest {
 		controller.addObject(new EnemyTest04(bsio, controller, 180+x, 280+y));
 		controller.addObject(new EnemyTest03(bsio, 300+x, 210+y));
 		controller.addObject(new EnemyTest04(bsio, controller, 360+x, 210+y));
-		controller.addObject(new EnemyTest04(bsio, controller, 400+x, 210+y));
+		controller.addObject(new EnemyTest05(bsio, controller, 400+x, 210+y));
 		
 		bsio.addObject(controller);
 		bsio.addBackgroundObject(new Clock(bsio) {{setPosition(new Vec2f(40, 40));}});

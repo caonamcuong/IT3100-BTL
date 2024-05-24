@@ -108,7 +108,8 @@ public class SlideController extends BasicController {
 		getIO().addBackgroundObject(map_gen);
 	}
 	private void endGame() {
-		getIO().reset();
+		//getIO().reset();
+		getIO().playSound("src/gameover.wav");
 		clearAllObjects();
 	}
 	private void restartGame() {

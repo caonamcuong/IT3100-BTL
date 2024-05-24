@@ -37,7 +37,7 @@ public class BasicIO implements Engine {
 	private TreeSet<Integer> pressing_keys;
 	private JLabel ev_label;
 	private Timer main_loop;
-	private BasicSpriteManager sprite_man;
+	private BasicSpriteManager sprite_manager;
 	private BasicQuadTree quad_tree;
 	private List<BasicObject> active_object;
 	private List<BasicObject> background_object;
@@ -45,6 +45,7 @@ public class BasicIO implements Engine {
 	private List<BasicObject> toremove_object;
 	private List<BasicObject> toadd_background;
 	private List<BasicObject> toremove_background;
+	private BasicSound sound_manager;
 	
 	// test section remove later
 	private JComponent jc;
@@ -69,7 +70,8 @@ public class BasicIO implements Engine {
 	    assert(isPerPixelTranslucencySupported);
 		
 		
-		sprite_man = new BasicSpriteManager();
+		sprite_manager = new BasicSpriteManager();
+		sound_manager = new BasicSound();
 		//quad_tree = new BasicQuadTree(new BoundingBox(
 		//		new BasicNumber(640*2), new BasicNumber(360*2), 
 		//		new BasicNumber(-320), new BasicNumber(-180)), 
@@ -122,7 +124,7 @@ public class BasicIO implements Engine {
 					if (sprite != null) {
 						BufferedImage bI = null;
 						try {
-							bI = sprite_man.getSpriteFrame(sprite, o.getSpriteIndex());
+							bI = sprite_manager.getSpriteFrame(sprite, o.getSpriteIndex());
 						}
 						catch (IOException e) {
 							throw new RuntimeException("cannot load sprite");
@@ -296,5 +298,13 @@ public class BasicIO implements Engine {
 	}
 	public void quadUpdateObject(BasicObject o, Vec2f old_pos) {
 		//quad_tree.updateObject(o, old_pos);
+	}
+	public void playSound(String s) {
+		try {
+			sound_manager.playSound(s);
+		}
+		catch (Exception ignored) {
+			ignored.printStackTrace(System.err);
+		}
 	}
 }

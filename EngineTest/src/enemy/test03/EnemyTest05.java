@@ -23,25 +23,25 @@ import player.PlayerHitbox;
 public class EnemyTest05 extends EnemyHurtBox {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
-				"src/goomba.png",
-				Arrays.asList(3),
-				Arrays.asList(155),
-				Arrays.asList(19),
-				Arrays.asList(19)
+				"src/skull2.png",
+				Arrays.asList(0),
+				Arrays.asList(20),
+				Arrays.asList(20),
+				Arrays.asList(20)
 			));
 		put("detecting", new BasicSprite (
-				"src/goomba.png",
-				Arrays.asList(3),
-				Arrays.asList(155),
-				Arrays.asList(19),
-				Arrays.asList(19)
+				"src/skull2.png",
+				Arrays.asList(0),
+				Arrays.asList(20),
+				Arrays.asList(20),
+				Arrays.asList(20)
 			));
 		put("attack", new BasicSprite (
-				"src/goomba.png",
-				Arrays.asList(3),
-				Arrays.asList(155),
-				Arrays.asList(19),
-				Arrays.asList(19)
+				"src/skull2.png",
+				Arrays.asList(20),
+				Arrays.asList(20),
+				Arrays.asList(20),
+				Arrays.asList(20)
 			));
 		put ("exploding", null);
 		put ("destroying", null);
@@ -68,12 +68,13 @@ public class EnemyTest05 extends EnemyHurtBox {
 	public EnemyTest05(BasicIO io) {
 		super(io);
 		setState("idle");
+		setScale(2f);
 		setPosition(new Vec2f(0,0));
-		setBBox(new BoundingBox(19, 19));
+		setBBox(new BoundingBox(22, 22));
 		setBBoxOrigin(new Vec2f(0.5f, 1.0f));
 		setBBoxDrawFlag(getIO().getDebug());
 		setSpriteOrigin(new Vec2f(0.5f, 1.0f));
-		setScale(1f);
+		setScale(1.5f);
 		control = null;
 		
 		velocity = new Vec2f(0,0);
@@ -115,6 +116,7 @@ public class EnemyTest05 extends EnemyHurtBox {
 		}
 		else if (getState() == "exploding") {
 			if (control != null) {
+				getIO().playSound("src/smb_fireball.wav");
 				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(-800, 0)));
 				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(-800, 800)));
 				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(-800, -800)));

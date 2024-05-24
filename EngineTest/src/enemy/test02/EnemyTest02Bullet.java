@@ -1,5 +1,6 @@
 package enemy.test02;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -17,7 +18,13 @@ import player.PlayerHitbox;
 
 public class EnemyTest02Bullet extends EnemyHurtBox {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
-		put("idle", null);
+		put("idle", new BasicSprite (
+				"src/bullet.png",
+				Arrays.asList(0,32),
+				Arrays.asList(0,0),
+				Arrays.asList(32,32),
+				Arrays.asList(12,12)
+			));
 		put("destroying", null);
 		put("destroyed", null);
 	}};
@@ -31,9 +38,10 @@ public class EnemyTest02Bullet extends EnemyHurtBox {
 		super(io);
 		setState("idle");
 		setPosition(new Vec2f(0,0));
-		setBBox(new BoundingBox(16, 16));
+		setBBox(new BoundingBox(12, 12));
 		setBBoxOrigin(new Vec2f(0.5f, 0.5f));
 		setBBoxDrawFlag(true);
+		setSpriteOrigin(new Vec2f(0.5f, 0.5f));
 		
 		velocity = new Vec2f(0,0);
 		live_timer = new BasicTimer(io.getStepPerSec() * 5, new Runnable() {
