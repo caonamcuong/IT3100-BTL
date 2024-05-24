@@ -19,28 +19,28 @@ import enemy.EnemyHurtBox;
 public class Player extends BasicObject {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
-			"bin/player.png",
+			"src/player.png",
 			Arrays.asList(0,96,96*2,96*3,96*4,96*5),
 			Arrays.asList(39,39,39,39,39,39),
 			Arrays.asList(96,96,96,96,96,96),
 			Arrays.asList(39,39,39,39,39,39)
 		));
 		put ("jump", new BasicSprite (
-			"bin/player.png",
+			"src/player.png",
 			Arrays.asList(96*6),
 			Arrays.asList(39),
 			Arrays.asList(96),
 			Arrays.asList(39)
 		));
 		put("attack", new BasicSprite (
-			"bin/player.png",
+			"src/player.png",
 			Arrays.asList(0,96,96*2,96*3,96*4,96*5,96*6,96*7,96*8),
 			Arrays.asList(0,0,0,0,0,0,0,0,0),
 			Arrays.asList(96,96,96,96,96,96,96,96,96),
 			Arrays.asList(39,39,39,39,39,39,39,39,39)
 		));
 		put("hurt", new BasicSprite (
-			"bin/player.png",
+			"src/player.png",
 			Arrays.asList(96*7),
 			Arrays.asList(39),
 			Arrays.asList(96),
@@ -280,6 +280,11 @@ public class Player extends BasicObject {
 		
 		if (getPosition().getY().toFloat() > 360) {
 			setState("gameover");
+			return;
+		}
+		else if (getPosition().getX().toFloat() < -30f) {
+			setState("gameover");
+			return;
 		}
 		
 		List<BasicObject> o = getIO().quadQueryObject(new BoundingBox(

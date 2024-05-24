@@ -52,6 +52,12 @@ public class Vec2f {
 	public BasicNumber dot(Vec2f o) {
 		return dot(o.getX(), o.getY());
 	}
+	public Vec2f normalize() {
+		float x = getX().toFloat();
+		float y = getY().toFloat();
+		float length = (float)Math.sqrt(x*x+y*y);
+		return new Vec2f(x / length, y / length);
+	}
 	//public float len() {
 	//	return (float)Math.sqrt(getX() * getX() + getY() * getY());
 	//}

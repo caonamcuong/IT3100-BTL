@@ -1,5 +1,6 @@
 package enemy.test02;
 
+import java.util.List;
 import java.util.TreeMap;
 
 import bIO.BasicIO;
@@ -7,18 +8,24 @@ import bIO.BasicNumber;
 import bIO.BasicObject;
 import bIO.BasicSprite;
 import bIO.BasicTimer;
+import bIO.BasicWall;
 import bIO.BoundingBox;
 import bIO.Vec2f;
 import enemy.EnemyHurtBox;
+import player.Player;
+import player.PlayerHitbox;
 
 public class EnemyTest02Bullet extends EnemyHurtBox {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", null);
+		put("destroying", null);
+		put("destroyed", null);
 	}};
 	@Override
 	public BasicSprite getSprite() { return state_machine.get(getState()); }
 	
 	private Vec2f velocity;
+	private BasicTimer live_timer;
 	
 	public EnemyTest02Bullet(BasicIO io) {
 		super(io);
@@ -29,6 +36,22 @@ public class EnemyTest02Bullet extends EnemyHurtBox {
 		setBBoxDrawFlag(true);
 		
 		velocity = new Vec2f(0,0);
+		live_timer = new BasicTimer(io.getStepPerSec() * 5, new Runnable() {
+			public void run() {
+				setState("destroying");
+				live_timer.stop();
+			}
+		});
+		live_timer.setup();
+	}
+	public EnemyTest02Bullet(BasicIO io, Vec2f position, Vec2f velo) {
+		this(io);
+		setPosition(position);
+		setVelocity(velo);
+	}
+	
+	public void setVelocity(Vec2f f) {
+		velocity = f;
 	}
 	public void setVelocity(float a, float b) {
 		velocity = new Vec2f(a,b);
@@ -36,10 +59,33 @@ public class EnemyTest02Bullet extends EnemyHurtBox {
 	
 	@Override
 	public void fixedUpdate() {
+		if (getState() == "destroying") {
+			setState("destroyed");
+			getIO().removeObject(this);
+			return;
+		}
+		else if (getState() == "destroyed") {
+			return;
+		}
+		live_timer.run();
+		
 		Vec2f mov_step = velocity.mul(new BasicNumber(getIO().getUnitStep(1f)));
 		Vec2f old_pos = getPosition();
 		setPosition(getPosition().add(mov_step));
-		getIO().quadUpdateObject(this, old_pos);
+		
+		List<BasicObject> o = getIO().quadQueryObject(new BoundingBox(
+				new BasicNumber(128), new BasicNumber(128),
+				getBBox().getX().sub(new BasicNumber(64)),
+				getBBox().getY().sub(new BasicNumber(64))
+			));
+		o.removeIf(p -> !((p instanceof BasicWall) || (p instanceof PlayerHitbox) || (p instanceof Player)));
+		
+		for (BasicObject w: o) {
+			if (w.getBBox().collideWith(getBBox())) {
+				setState("destroying");
+				return;
+			}
+		}
 	}
 
 	@Override

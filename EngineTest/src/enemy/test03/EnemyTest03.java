@@ -21,32 +21,34 @@ import player.PlayerHitbox;
 public class EnemyTest03 extends EnemyHurtBox {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
-				"bin/goomba.png",
+				"src/goomba.png",
 				Arrays.asList(3),
 				Arrays.asList(155),
 				Arrays.asList(19),
 				Arrays.asList(19)
 			));
 		put("detecting", new BasicSprite (
-				"bin/goomba.png",
+				"src/goomba.png",
 				Arrays.asList(3),
 				Arrays.asList(155),
 				Arrays.asList(19),
 				Arrays.asList(19)
 			));
 		put("attack", new BasicSprite (
-				"bin/goomba.png",
+				"src/goomba.png",
 				Arrays.asList(3),
 				Arrays.asList(155),
 				Arrays.asList(19),
 				Arrays.asList(19)
 			));
+		put ("destroying", null);
+		put ("destroyed", null);
 	}};
 	@Override
 	public BasicSprite getSprite() { return state_machine.get(getState()); }
 	
-	private static final float detect_xrange = 256;
-	private static final float detect_yrange = 64;
+	private static final float detect_xrange = 150;
+	private static final float detect_yrange = 32;
 	private static final float grav_speed = 0.2f;
 	private static final float mov_speed = 300f;
 	private static final float jmp_speed = 1200f;
@@ -84,6 +86,20 @@ public class EnemyTest03 extends EnemyHurtBox {
 	
 	@Override
 	public void fixedUpdate() {
+		if (getState() == "destroying") {
+			setState("destroyed");
+			getIO().removeObject(this);
+			return;
+		}
+		else if (getState() == "destroyed") {
+			return;
+		}
+		
+		if (getPosition().getX().toFloat() < -64f) {
+			setState("destroying");
+			return;
+		}
+		
 		Vec2f mov_step = new Vec2f(0,0);
 		velocity.setX(new BasicNumber(0));
 		velocity = velocity.add(new BasicNumber(0), new BasicNumber(grav_speed));
@@ -99,7 +115,8 @@ public class EnemyTest03 extends EnemyHurtBox {
 		
 		for (BasicObject pHb : playerHb) {
 			if (pHb.getBBox().collideWith(getBBox())) {
-				getIO().removeObject(this);
+				setState("destroying");
+				return;
 			}
 		}
 		

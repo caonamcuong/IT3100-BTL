@@ -209,7 +209,7 @@ public class SlideController extends BasicController {
 				controlled_objects.add(o);
 				getIO().addObject(o);
 			}
-			for (BasicObject o: toremove_objects) { // O(n^2)
+			for (BasicObject o: toremove_objects) {
 				controlled_objects.remove(o);
 				getIO().removeObject(o); 
 			}

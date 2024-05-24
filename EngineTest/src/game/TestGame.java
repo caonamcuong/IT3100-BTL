@@ -32,7 +32,7 @@ public class TestGame {
 		//for (int i = 0; i < 40; ++i) {
 		//	if (i == 2) continue;
 		//  	for (int j = 6; j <= 9; ++j) {
-		//	BasicNumber xx = new BasicNumber(i * 32f);
+		  //	BasicNumber xx = new BasicNumber(i * 32f);
 		//	BasicNumber yy = new BasicNumber(j * 32f);
 		//	controller.addObject(new BasicWall(bsio) {{setPosition(new Vec2f(xx, yy)); bboxUpdate();}});
 		//	}
