@@ -17,21 +17,21 @@ import enemy.EnemyWallTest;
 public class EnemyTest01 extends BasicObject {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
-				"./src/goomba.png",
+				"goomba.png",
 				Arrays.asList(3),
 				Arrays.asList(155),
 				Arrays.asList(19),
 				Arrays.asList(19)
 			));
 		put("detect_player", new BasicSprite (
-				"./src/goomba.png",
+				"goomba.png",
 				Arrays.asList(3),
 				Arrays.asList(155),
 				Arrays.asList(19),
 				Arrays.asList(19)
 			));
 		put("attack", new BasicSprite (
-				"./src/goomba.png",
+				"goomba.png",
 				Arrays.asList(3),
 				Arrays.asList(155),
 				Arrays.asList(19),

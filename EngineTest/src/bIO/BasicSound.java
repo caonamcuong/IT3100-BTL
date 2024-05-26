@@ -27,8 +27,7 @@ public class BasicSound {
 	}
 	
 	public void loadSound(String s) throws IOException, UnsupportedAudioFileException, LineUnavailableException {
-		File url = new File(s);
-		AudioInputStream audioStream = AudioSystem.getAudioInputStream(url);
+		AudioInputStream audioStream = AudioSystem.getAudioInputStream(getClass().getResource(s));
 		AudioFormat af = audioStream.getFormat();
 		int size = (int) (af.getFrameSize() * audioStream.getFrameLength());
 		byte[] audio = new byte[size];
@@ -53,7 +52,7 @@ public class BasicSound {
 	
 	public static void main(String[] args) throws IOException, UnsupportedAudioFileException, LineUnavailableException, InterruptedException {
 		BasicSound sound_manager = new BasicSound();
-		sound_manager.playSound("C:/Users/PC/Downloads/sprite/smb_jump-small.wav");
+		sound_manager.playSound("smb_jump-small.wav");
 		Thread.sleep(1000);
 	}
 }

@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -26,7 +27,7 @@ public class BasicSpriteManager {
 		if (textureExists(tex_name)) return;
 		BufferedImage img = null;
 		try {
-			ImageIcon iicon = new ImageIcon(ImageIO.read(new File(tex_name)));
+			ImageIcon iicon = new ImageIcon(ImageIO.read(getClass().getResource(tex_name)));
 			
 			img = new BufferedImage(
 				iicon.getIconWidth(),

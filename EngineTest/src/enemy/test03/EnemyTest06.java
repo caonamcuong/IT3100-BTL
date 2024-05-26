@@ -23,32 +23,32 @@ import player.PlayerHitbox;
 public class EnemyTest06 extends EnemyHurtBox {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
-				"src/goomba.png",
-				Arrays.asList(3),
-				Arrays.asList(155),
-				Arrays.asList(19),
-				Arrays.asList(19)
+				"skull3.png",
+				Arrays.asList(0),
+				Arrays.asList(0),
+				Arrays.asList(17),
+				Arrays.asList(24)
 			));
 		put("detecting", new BasicSprite (
-				"src/goomba.png",
-				Arrays.asList(3),
-				Arrays.asList(155),
-				Arrays.asList(19),
-				Arrays.asList(19)
+				"skull3.png",
+				Arrays.asList(0),
+				Arrays.asList(0),
+				Arrays.asList(17),
+				Arrays.asList(24)
 			));
 		put("attack", new BasicSprite (
-				"src/goomba.png",
-				Arrays.asList(3),
-				Arrays.asList(155),
-				Arrays.asList(19),
-				Arrays.asList(19)
+				"skull3.png",
+				Arrays.asList(0),
+				Arrays.asList(0),
+				Arrays.asList(17),
+				Arrays.asList(24)
 			));
 		put("non", new BasicSprite (
-				"src/goomba.png",
-				Arrays.asList(3),
-				Arrays.asList(155),
-				Arrays.asList(19),
-				Arrays.asList(19)
+				"skull3.png",
+				Arrays.asList(0),
+				Arrays.asList(0),
+				Arrays.asList(17),
+				Arrays.asList(24)
 			));
 		put ("destroying", null);
 		put ("destroyed", null);
@@ -57,11 +57,11 @@ public class EnemyTest06 extends EnemyHurtBox {
 	public BasicSprite getSprite() { return state_machine.get(getState()); }
 	
 	private static final float detect_xrange = 250;
-	private static final float detect_yrange = 60;
+	private static final float detect_yrange = 80;
 	private static final float grav_speed = 0.2f;
 	private static final float mov_speed = 400f;
 	private static final float jmp_speed = 1200f;
-	private static final long detect_time = BasicIO.getStepPerSec() * 2;
+	private static final long detect_time = (long)(BasicIO.getStepPerSec() * 1.5);
 	
 	private Vec2f velocity;
 	private int direction;
@@ -74,7 +74,7 @@ public class EnemyTest06 extends EnemyHurtBox {
 		super(io);
 		setState("idle");
 		setPosition(new Vec2f(0,0));
-		setBBox(new BoundingBox(19, 19));
+		setBBox(new BoundingBox(17, 17));
 		setBBoxOrigin(new Vec2f(0.5f, 1.0f));
 		setBBoxDrawFlag(getIO().getDebug());
 		setSpriteOrigin(new Vec2f(0.5f, 1.0f));
@@ -107,6 +107,7 @@ public class EnemyTest06 extends EnemyHurtBox {
 	public void fixedUpdate() {
 		if (getState() == "destroying") {
 			setState("destroyed");
+			getIO().playSound("smb_kick_02.wav");
 			getIO().removeObject(this);
 			return;
 		}
@@ -168,7 +169,7 @@ public class EnemyTest06 extends EnemyHurtBox {
 			}
 		}
 		else if (getState() == "attack") {
-			getIO().playSound("src/smb_fireball.wav");
+			getIO().playSound("smb_fireball.wav");
 			control.addObject(new EnemyTest02Bullet(getIO(), getPosition().sub(new Vec2f(0, 10)), shoot_direction.mul(new BasicNumber(500f))));
 			//setState("idle");
 			setState("non");

@@ -13,7 +13,7 @@ import bIO.Vec2f;
 public class EnemyTest02V3 extends BasicObject {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
-				"./src/goomba.png",
+				"goomba.png",
 				Arrays.asList(3),
 				Arrays.asList(155),
 				Arrays.asList(19),

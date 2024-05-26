@@ -15,7 +15,7 @@ import controller.SlideController;
 public class ground extends BasicWall {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
-				"src/map2.png",
+				"map2.png",
 				Arrays.asList(0),
 				Arrays.asList(0),
 				Arrays.asList(200),

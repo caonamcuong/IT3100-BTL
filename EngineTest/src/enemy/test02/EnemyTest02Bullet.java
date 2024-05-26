@@ -19,7 +19,7 @@ import player.PlayerHitbox;
 public class EnemyTest02Bullet extends EnemyHurtBox {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
-				"src/bullet.png",
+				"bullet.png",
 				Arrays.asList(0,32),
 				Arrays.asList(0,0),
 				Arrays.asList(32,32),
@@ -40,7 +40,7 @@ public class EnemyTest02Bullet extends EnemyHurtBox {
 		setPosition(new Vec2f(0,0));
 		setBBox(new BoundingBox(12, 12));
 		setBBoxOrigin(new Vec2f(0.5f, 0.5f));
-		setBBoxDrawFlag(true);
+		setBBoxDrawFlag(getIO().getDebug());
 		setSpriteOrigin(new Vec2f(0.5f, 0.5f));
 		
 		velocity = new Vec2f(0,0);

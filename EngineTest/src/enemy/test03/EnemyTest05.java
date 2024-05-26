@@ -23,21 +23,21 @@ import player.PlayerHitbox;
 public class EnemyTest05 extends EnemyHurtBox {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
-				"src/skull2.png",
+				"skull2.png",
 				Arrays.asList(0),
 				Arrays.asList(20),
 				Arrays.asList(20),
 				Arrays.asList(20)
 			));
 		put("detecting", new BasicSprite (
-				"src/skull2.png",
+				"skull2.png",
 				Arrays.asList(0),
 				Arrays.asList(20),
 				Arrays.asList(20),
 				Arrays.asList(20)
 			));
 		put("attack", new BasicSprite (
-				"src/skull2.png",
+				"skull2.png",
 				Arrays.asList(20),
 				Arrays.asList(20),
 				Arrays.asList(20),
@@ -50,12 +50,12 @@ public class EnemyTest05 extends EnemyHurtBox {
 	@Override
 	public BasicSprite getSprite() { return state_machine.get(getState()); }
 	
-	private static final float detect_xrange = 100;
-	private static final float detect_yrange = 32;
+	private static final float detect_xrange = 150;
+	private static final float detect_yrange = 60;
 	private static final float grav_speed = 0.2f;
 	private static final float mov_speed = 300f;
 	private static final float jmp_speed = 1200f;
-	private static final long detect_time = BasicIO.getStepPerSec() * 2;
+	private static final long detect_time = (long)(BasicIO.getStepPerSec() * 1);
 	private static final long explode_time = (long)(BasicIO.getStepPerSec() * 0.8);
 	
 	private Vec2f velocity;
@@ -108,6 +108,7 @@ public class EnemyTest05 extends EnemyHurtBox {
 	public void fixedUpdate() {
 		if (getState() == "destroying") {
 			setState("destroyed");
+			getIO().playSound("smb_kick_02.wav");
 			getIO().removeObject(this);
 			return;
 		}
@@ -116,13 +117,17 @@ public class EnemyTest05 extends EnemyHurtBox {
 		}
 		else if (getState() == "exploding") {
 			if (control != null) {
-				getIO().playSound("src/smb_fireball.wav");
+				getIO().playSound("smb_fireball.wav");
 				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(-800, 0)));
-				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(-800, 800)));
+				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(-800, 900)));
 				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(-800, -800)));
+				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(-800, 400)));
+				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(-800, -400)));
 				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(+800, 0)));
 				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(+800, 800)));
 				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(+800, -800)));
+				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(+800, 400)));
+				control.addObject(new EnemyTest02Bullet(getIO(), getPosition(), new Vec2f(+800, -400)));
 			}
 			setState("destroying");
 			return;

@@ -50,11 +50,11 @@ public class BasicIO implements Engine {
 	// test section remove later
 	private JComponent jc;
 	
-	public static boolean getDebug() {return true;}
+	public static boolean getDebug() {return false;}
 	
 	public BasicIO() {
-		//if (System.getProperty("sun.java2d.opengl") != null)
-		//	System.setProperty("sun.java2d.opengl", "true");
+		if (System.getProperty("sun.java2d.opengl") != null)
+			System.setProperty("sun.java2d.opengl", "true");
 		input_queue = new LinkedList<InputEvent>();
 		pressing_keys = new TreeSet<Integer>();
 		past_time = System.nanoTime();

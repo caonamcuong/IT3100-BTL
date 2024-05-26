@@ -9,14 +9,14 @@ import java.awt.event.KeyEvent;
 public class BasicPlayer extends BasicObject {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
-			"./src/textureTest.png",
+			"textureTest.png",
 			Arrays.asList(0),
 			Arrays.asList(8),
 			Arrays.asList(16),
 			Arrays.asList(16)
 		));
 		put("run", new BasicSprite (
-			"./src/textureTest.png",
+			"textureTest.png",
 			Arrays.asList(20,38,56),
 			Arrays.asList(8,8,8),
 			Arrays.asList(16,16,16),

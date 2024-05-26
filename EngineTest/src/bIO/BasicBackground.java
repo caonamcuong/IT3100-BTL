@@ -6,7 +6,7 @@ import java.util.TreeMap;
 public class BasicBackground extends BasicObject {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
-				"src/background.png",
+				"background.png",
 				Arrays.asList(0),
 				Arrays.asList(0),
 				Arrays.asList(640),

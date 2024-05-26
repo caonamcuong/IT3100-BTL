@@ -21,21 +21,21 @@ import player.PlayerHitbox;
 public class EnemyTest03 extends EnemyHurtBox {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
-				"src/skull.png",
+				"skull.png",
 				Arrays.asList(0),
 				Arrays.asList(24),
 				Arrays.asList(20),
 				Arrays.asList(24)
 			));
 		put("detecting", new BasicSprite (
-				"src/skull.png",
+				"skull.png",
 				Arrays.asList(0),
 				Arrays.asList(0),
 				Arrays.asList(20),
 				Arrays.asList(24)
 			));
 		put("attack", new BasicSprite (
-				"src/skull.png",
+				"skull.png",
 				Arrays.asList(0),
 				Arrays.asList(48),
 				Arrays.asList(20),
@@ -47,12 +47,12 @@ public class EnemyTest03 extends EnemyHurtBox {
 	@Override
 	public BasicSprite getSprite() { return state_machine.get(getState()); }
 	
-	private static final float detect_xrange = 150;
-	private static final float detect_yrange = 32;
+	private static final float detect_xrange = 200;
+	private static final float detect_yrange = 60;
 	private static final float grav_speed = 0.2f;
 	private static final float mov_speed = 300f;
 	private static final float jmp_speed = 1200f;
-	private static final long detect_time = BasicIO.getStepPerSec();
+	private static final long detect_time = (long)(BasicIO.getStepPerSec() * 0.8);
 	
 	private Vec2f velocity;
 	private int direction;
@@ -88,6 +88,7 @@ public class EnemyTest03 extends EnemyHurtBox {
 	public void fixedUpdate() {
 		if (getState() == "destroying") {
 			setState("destroyed");
+			getIO().playSound("smb_kick_02.wav");
 			getIO().removeObject(this);
 			return;
 		}
@@ -138,7 +139,7 @@ public class EnemyTest03 extends EnemyHurtBox {
 				detect_timer.run();
 				
 				if (detect_flag) {
-					getIO().playSound("src/smb_fireball.wav");
+					getIO().playSound("smb_fireball.wav");
 					detect_flag = false;
 					velocity.setY(new BasicNumber(-jmp_speed));
 					setState("attack");

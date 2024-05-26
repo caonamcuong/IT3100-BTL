@@ -24,28 +24,34 @@ public class SlideController extends BasicController {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", null);
 		put("menu1", new BasicSprite (
-				"src/menuall.png",
+				"menuall.png",
 				Arrays.asList(0),
 				Arrays.asList(0),
 				Arrays.asList(640),
 				Arrays.asList(360)
 			));
 		put("menu2", new BasicSprite (
-				"src/menuall.png",
+				"menuall.png",
 				Arrays.asList(0),
 				Arrays.asList(360),
 				Arrays.asList(640),
 				Arrays.asList(360)
 			));
 		put("menu3", new BasicSprite (
-				"src/menuall.png",
+				"menuall.png",
 				Arrays.asList(0),
 				Arrays.asList(360*2),
 				Arrays.asList(640),
 				Arrays.asList(360)
 			));
 		put("over", null);
-		put("post-over", null);
+		put("post-over", new BasicSprite (
+				"gameover.png",
+				Arrays.asList(0),
+				Arrays.asList(40),
+				Arrays.asList(640),
+				Arrays.asList(320)
+			));
 	}};
 	@Override
 	public BasicSprite getSprite() { return state_machine.get(getState()); }
@@ -91,7 +97,7 @@ public class SlideController extends BasicController {
 	private void startGame() {
 		
 		main_player = new Player(getIO(), this);
-		main_player.setPosition(new Vec2f(120,48));
+		main_player.setPosition(new Vec2f(200,180));
 		main_player.bboxUpdate();
 		
 		addObject(main_player);
@@ -109,7 +115,7 @@ public class SlideController extends BasicController {
 	}
 	private void endGame() {
 		//getIO().reset();
-		getIO().playSound("src/gameover.wav");
+		getIO().playSound("gameover.wav");
 		clearAllObjects();
 	}
 	private void restartGame() {

@@ -19,28 +19,28 @@ import enemy.EnemyHurtBox;
 public class Player extends BasicObject {
 	private static final TreeMap<String, BasicSprite> state_machine = new TreeMap<String, BasicSprite>() {{
 		put("idle", new BasicSprite (
-			"src/player.png",
+			"player.png",
 			Arrays.asList(0 ,96,96*2,96*3,96*4,96*5),
 			Arrays.asList(39,39,39  ,39  ,39  ,39),
 			Arrays.asList(96,96,96  ,96  ,96  ,96),
 			Arrays.asList(39,39,39  ,39  ,39  ,39)
 		));
 		put ("jump", new BasicSprite (
-			"src/player.png",
+			"player.png",
 			Arrays.asList(96*6),
 			Arrays.asList(39),
 			Arrays.asList(96),
 			Arrays.asList(39)
 		));
 		put("attack", new BasicSprite (
-			"src/player.png",
+			"player.png",
 			Arrays.asList(0,96,96*2,96*3,96*4,96*5,96*6,96*7,96*8),
 			Arrays.asList(0,0,0,0,0,0,0,0,0),
 			Arrays.asList(96,96,96,96,96,96,96,96,96),
 			Arrays.asList(39,39,39,39,39,39,39,39,39)
 		));
 		put("hurt", new BasicSprite (
-			"src/player.png",
+			"player.png",
 			Arrays.asList(96*7),
 			Arrays.asList(39),
 			Arrays.asList(96),
@@ -129,7 +129,7 @@ public class Player extends BasicObject {
 		});
 		attack_spawn_timer = new BasicTimer(attack_delay, new Runnable() {
 			public void run() {
-				getIO().playSound("src/smb_kick.wav");
+				getIO().playSound("smb_kick_01.wav");
 				controller.addObject(
 					new PlayerHitbox(getIO(), 
 						aPlayer.getPosition().add(new Vec2f(direction==0?32f:-32f, -16f)),
@@ -171,7 +171,7 @@ public class Player extends BasicObject {
 		int movy = 0;
 		if (getIO().isPressing(KEY_UP)) {
 			if (can_jump) {
-				getIO().playSound("src/smb_jump-small.wav");
+				getIO().playSound("smb_jump-small.wav");
 				movy = 1;
 				can_jump = false;
 				holding_jump = true;
@@ -230,7 +230,7 @@ public class Player extends BasicObject {
 		}
 	}
 	private void setHurt() {
-		getIO().playSound("src/smb_bump.wav");
+		getIO().playSound("smb_bump.wav");
 		setState("hurt");
 		updateHurtYMovement();
 		hurt_timer.setup();
