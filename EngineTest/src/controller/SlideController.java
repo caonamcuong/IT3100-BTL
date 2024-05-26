@@ -37,13 +37,6 @@ public class SlideController extends BasicController {
 				Arrays.asList(640),
 				Arrays.asList(360)
 			));
-		put("menu3", new BasicSprite (
-				"menuall.png",
-				Arrays.asList(0),
-				Arrays.asList(360*2),
-				Arrays.asList(640),
-				Arrays.asList(360)
-			));
 		put("over", null);
 		put("post-over", new BasicSprite (
 				"gameover.png",
@@ -137,7 +130,7 @@ public class SlideController extends BasicController {
 			}
 			else if (inputAcceptFlag && getIO().isPressing(KEY_UP)) {
 				disableInput();
-				setState("menu3");
+				setState("menu2");
 			}
 			else if (inputAcceptFlag && getIO().isPressing(KEY_SELECT)) {
 				disableInput();
@@ -149,27 +142,11 @@ public class SlideController extends BasicController {
 		else if (getState() == "menu2") {
 			if (inputAcceptFlag && getIO().isPressing(KEY_DOWN)) {
 				disableInput();
-				setState("menu3");
-			}
-			else if (inputAcceptFlag && getIO().isPressing(KEY_UP)) {
-				disableInput();
-				setState("menu1");
-			}
-			inputDelayTimer.run();
-		}
-		else if (getState() == "menu3") {
-			if (inputAcceptFlag && getIO().isPressing(KEY_DOWN)) {
-				disableInput();
 				setState("menu1");
 			}
 			else if (inputAcceptFlag && getIO().isPressing(KEY_UP)) {
 				disableInput();
-				setState("menu2");
-			}
-			else if (inputAcceptFlag && getIO().isPressing(KEY_SELECT)) {
-				disableInput();
-				// endGame();
-				//setState("idle");
+				setState("menu1");
 			}
 			inputDelayTimer.run();
 		}
